@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.imasdb.R;
 
@@ -61,8 +63,17 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View loginView = inflater.inflate(R.layout.fragment_login, container, false);
-
+        final View loginView = inflater.inflate(R.layout.fragment_login, container, false);
+        Button loginButton = loginView.findViewById(R.id.login_button);
+        final EditText username = loginView.findViewById(R.id.login_username);
+        final EditText password = loginView.findViewById(R.id.login_password);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = username.getText().toString();
+                String pass = password.getText().toString();
+            }
+        });
         return loginView;
     }
 }
