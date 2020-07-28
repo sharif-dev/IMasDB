@@ -114,6 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.i("salam", "validateRequestToken");
 
                     switch (response.code()) {
+
                         // TODO: implement error codes handling
                     }
                 }
@@ -121,6 +122,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
+                Log.i("salam", "validateRequestTok " + t.getMessage());
+
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
 

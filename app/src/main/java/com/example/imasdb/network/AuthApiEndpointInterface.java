@@ -5,9 +5,11 @@ import com.example.imasdb.model.Token;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -25,6 +27,6 @@ public interface AuthApiEndpointInterface {
     Call<Session> getUserSession(@Query("api_key") String apiKey, @Field("request_token") String requestToken);
 
     @FormUrlEncoded
-    @POST("authentication/session")
+    @HTTP(method = "DELETE", path = "authentication/session", hasBody = true)
     Call<Object> logout(@Query("api_key") String apiKey, @Field("session_id") String sessionId);
 }
