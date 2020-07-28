@@ -1,16 +1,31 @@
 package com.example.imasdb.view;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.imasdb.R;
+import com.example.imasdb.model.Session;
+import com.example.imasdb.model.Token;
+import com.example.imasdb.model.User;
+import com.example.imasdb.network.AuthApiEndpointInterface;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,8 +87,111 @@ public class LoginFragment extends Fragment {
             public void onClick(View view) {
                 String name = username.getText().toString();
                 String pass = password.getText().toString();
+                login(name, pass);
             }
         });
         return loginView;
+    }
+
+    protected void login(String username, String password) {
+        Resources res = getResources();
+        String baseUrl = res.getString(R.string.base_url);
+        Gson gson = new GsonBuilder().setLenient().create();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create(gson)).build();
+        AuthApiEndpointInterface myAuthApi = retrofit.create(AuthApiEndpointInterface.class);
+        User.getInstance().setAuthDetails(username, password);
+        User.getInstance().setLoginSuccess(User.LoginSuccess.IN_PROGRESS);
+        getRequestToken(myAuthApi, res.getString(R.string.api_key));
+    }
+
+    protected void getRequestToken(final AuthApiEndpointInterface myAuthApi, final String apiKey) {
+        Log.i("salam", "getRequestToken");
+        Call<Token> call = myAuthApi.getRequestToken(apiKey);
+
+        call.enqueue(new Callback<Token>() {
+            @Override
+            public void onResponse(Call<Token> call, Response<Token> response) {
+                if (response.isSuccessful()) {
+                    User.getInstance().setRequestToken(response.body());
+                    validateRequestToken(myAuthApi, apiKey);
+                } else {
+                    switch (response.code()) {
+                        // TODO: implement error codes handling
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Token> call, Throwable t) {
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+        });
+    }
+
+    private void validateRequestToken(final AuthApiEndpointInterface myAuthApi, final String apiKey) {
+        String requestToken = User.getInstance().getRequestToken().requestToken;
+        String username = User.getInstance().getUsername();
+        String password = User.getInstance().getPassword();
+        Log.i("salam", "validateRequestToken");
+
+        Call<Token> call = myAuthApi.getValidateToken(apiKey, username, password, requestToken);
+        call.enqueue(new Callback<Token>() {
+            @Override
+            public void onResponse(Call<Token> call, Response<Token> response) {
+                if (response.isSuccessful()) {
+                    User.getInstance().setRequestToken(response.body());
+                    getSessionId(myAuthApi, apiKey);
+                } else {
+                    Log.i("salam", "validateRequestToken");
+
+                    switch (response.code()) {
+                        // TODO: implement error codes handling
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Token> call, Throwable t) {
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+        });
+    }
+
+    private void getSessionId(AuthApiEndpointInterface myAuthApi, String apiKey) {
+        String requestToken = User.getInstance().getRequestToken().requestToken;
+        Log.i("salam", requestToken);
+
+        Call<Session> call = myAuthApi.getUserSession(apiKey, requestToken);
+
+        call.enqueue(new Callback<Session>() {
+            @Override
+            public void onResponse(Call<Session> call, Response<Session> response) {
+                Log.i("succeed", response.message());
+
+                if (response.isSuccessful()) {
+                    User.getInstance().setSessionToken(response.body());
+                    User.getInstance().setLoginSuccess(User.LoginSuccess.SUCCEED);
+                    Log.i("succeed", response.body().getSessionId());
+                } else {
+                    Log.i("hello", response.message());
+
+                    switch (response.code()) {
+                        // TODO: implement error codes handling
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Session> call, Throwable t) {
+                Log.i("sssssss", t.getMessage());
+
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+        });
     }
 }
