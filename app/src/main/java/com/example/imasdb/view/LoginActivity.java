@@ -1,18 +1,17 @@
 package com.example.imasdb.view;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.imasdb.MainActivity;
 import com.example.imasdb.R;
 import com.example.imasdb.model.Session;
 import com.example.imasdb.model.Token;
@@ -27,61 +26,23 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LoginFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class LoginFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public LoginFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LoginFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LoginFragment newInstance(String param1, String param2) {
-        LoginFragment fragment = new LoginFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+public class LoginActivity extends AppCompatActivity {
+    Resources res;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        setContentView(R.layout.activity_login);
+        res = getResources();
+        int loginType = getIntent().getIntExtra("loginType", -1);
+        Log.i("logintTupe", Integer.toString(loginType));
+        if (loginType == MainActivity.LoginLaunchType.LOGOUT.ordinal()) {
+            logout();
         }
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        final View loginView = inflater.inflate(R.layout.fragment_login, container, false);
-        Button loginButton = loginView.findViewById(R.id.login_button);
-        final EditText username = loginView.findViewById(R.id.login_username);
-        final EditText password = loginView.findViewById(R.id.login_password);
+        Button loginButton = findViewById(R.id.login_button);
+        final EditText username = findViewById(R.id.login_username);
+        final EditText password = findViewById(R.id.login_password);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,17 +51,22 @@ public class LoginFragment extends Fragment {
                 login(name, pass);
             }
         });
-        return loginView;
+
     }
 
-    protected void login(String username, String password) {
+    private AuthApiEndpointInterface getAuthApi() {
+
         Resources res = getResources();
         String baseUrl = res.getString(R.string.base_url);
         Gson gson = new GsonBuilder().setLenient().create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson)).build();
-        AuthApiEndpointInterface myAuthApi = retrofit.create(AuthApiEndpointInterface.class);
+        return retrofit.create(AuthApiEndpointInterface.class);
+    }
+
+    protected void login(String username, String password) {
+        AuthApiEndpointInterface myAuthApi = getAuthApi();
         User.getInstance().setAuthDetails(username, password);
         User.getInstance().setLoginSuccess(User.LoginSuccess.IN_PROGRESS);
         getRequestToken(myAuthApi, res.getString(R.string.api_key));
@@ -125,7 +91,7 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
 
         });
@@ -155,7 +121,7 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
 
         });
@@ -175,6 +141,7 @@ public class LoginFragment extends Fragment {
                 if (response.isSuccessful()) {
                     User.getInstance().setSessionToken(response.body());
                     User.getInstance().setLoginSuccess(User.LoginSuccess.SUCCEED);
+                    finishLogin();
                     Log.i("succeed", response.body().getSessionId());
                 } else {
                     Log.i("hello", response.message());
@@ -189,9 +156,40 @@ public class LoginFragment extends Fragment {
             public void onFailure(Call<Session> call, Throwable t) {
                 Log.i("sssssss", t.getMessage());
 
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
 
         });
+    }
+
+    private void finishLogin() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("loginCompleted", MainActivity.LoginLaunchType.LOGIN);
+        startActivity(intent);
+    }
+
+    public void logout() {
+        AuthApiEndpointInterface myAuthApi = getAuthApi();
+        Log.i("Session token", User.getInstance().getSessionToken().getSessionId());
+
+        Call<Object> logout = myAuthApi.logout(res.getString(R.string.api_key), User.getInstance().getSessionToken().getSessionId());
+        logout.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+
+                if (response.code() == 200) {
+                    Toast.makeText(getApplicationContext(), "you logged out successfully", Toast.LENGTH_LONG).show();
+
+                } else {
+                    Toast.makeText(getApplicationContext(), Integer.toString(response.code()), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 }

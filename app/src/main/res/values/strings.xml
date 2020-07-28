@@ -13,6 +13,6 @@
     <string name="username">username</string>
     <string name="password">password</string>
     <string name="login">login</string>
-    <string name="base_url">https://api.themoviedb.org</string>
-    <string name="api_key">xxxx</string>
+    <string name="base_url">https://api.themoviedb.org/3/</string>
+    <string name="api_key">xxxxx</string>
 </resources>

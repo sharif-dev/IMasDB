@@ -73,4 +73,5 @@ public class User {
     public static User getInstance() {
         return user;
     }
+
 }
