@@ -14,5 +14,6 @@
     <string name="password">password</string>
     <string name="login">login</string>
     <string name="base_url">https://api.themoviedb.org/3/</string>
-    <string name="api_key">xxx</string>
+    <string name="api_key">6f715faa8628ff0b6b87979909f49a9a</string>
+    <string name="sign_up">sign up</string>
 </resources>

@@ -47,4 +47,14 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_password" />
+
+    <Button
+        android:layout_width="110dp"
+        android:layout_height="34dp"
+        android:id="@+id/signup_btn"
+        android:text="@string/sign_up"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

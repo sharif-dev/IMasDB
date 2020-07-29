@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +20,6 @@ import com.example.imasdb.model.User;
 import com.example.imasdb.network.AuthApiEndpointInterface;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,7 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
     Resources res;
-
+    Button signUpBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         Button loginButton = findViewById(R.id.login_button);
+        signUpBtn = findViewById(R.id.signup_btn);
         final EditText username = findViewById(R.id.login_username);
         final EditText password = findViewById(R.id.login_password);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +52,23 @@ public class LoginActivity extends AppCompatActivity {
                 login(name, pass);
             }
         });
+        signUpBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                loadSignUpPage();
+            }
+        });
 
+    }
+
+    private void loadSignUpPage() {
+//        String url = "http://www.google.com";
+//        Intent i = new Intent(Intent.ACTION_VIEW);
+//        i.setData(Uri.parse(url));
+//        startActivity(i);
+
+        Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
+        startActivity(intent);
     }
 
     private AuthApiEndpointInterface getAuthApi() {
