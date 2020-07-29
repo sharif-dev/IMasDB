@@ -108,12 +108,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void launchComposeView(LoginLaunchType loginLaunchType) {
-        // first parameter is the context, second is the class of the activity to launch
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         intent.putExtra("loginType", loginLaunchType.ordinal());
-
-        startActivity(intent); // brings up the second activity
-
+        startActivity(intent);
     }
 
 
