@@ -3,13 +3,14 @@ package com.example.imasdb.model;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.example.imasdb.model.movie_detailes.*;
 
-public class Movie {
+public class Movie implements Serializable {
 
     public Movie(String originalTitle) {
         this.originalTitle = originalTitle;

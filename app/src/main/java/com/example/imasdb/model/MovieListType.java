@@ -14,5 +14,6 @@ public enum MovieListType {
     MovieListType(int i, MovieAdapter adapter) {
         this.adapter = adapter;
         this.index = i;
+
     }
 }

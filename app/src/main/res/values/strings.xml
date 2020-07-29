@@ -20,4 +20,5 @@
     <string name="recently_played_movies">recently played movies</string>
     <string name="most_popular_movies">most popular movies</string>
     <string name="top_rated_movies">top rated movies</string>
+    <string name="summary">summary</string>
 </resources>

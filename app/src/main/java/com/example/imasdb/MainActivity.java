@@ -76,6 +76,12 @@ public class MainActivity extends AppCompatActivity {
             MovieListType movieListType = MovieListType.values()[i];
             movieListBuilder.getMovieList(movieListType, movieListType.adapter);
             recyclerView.setAdapter(movieListType.adapter);
+            movieListType.adapter.setOnClickListener(new MovieAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Movie movie) {
+                    
+                }
+            });
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             SnapHelper snapHelper = new LinearSnapHelper();
             snapHelper.attachToRecyclerView(recyclerView);
