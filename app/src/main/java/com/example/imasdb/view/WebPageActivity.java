@@ -15,12 +15,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.imasdb.R;
 
-public class SignUpActivity  extends AppCompatActivity {
+public class WebPageActivity extends AppCompatActivity {
     WebView webView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_web_page);
         webView = findViewById(R.id.web_view);
         String url = getIntent().getData().toString();
         loadWebView(url);
@@ -35,7 +35,7 @@ public class SignUpActivity  extends AppCompatActivity {
         webView.loadUrl(url);
 
 
-        final ProgressDialog progressBar = new ProgressDialog(SignUpActivity.this);
+        final ProgressDialog progressBar = new ProgressDialog(WebPageActivity.this);
         progressBar.setMessage("Please wait...");
         webView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
