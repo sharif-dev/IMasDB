@@ -63,7 +63,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         Movie movie = mMovies.get(position);
         // Set item views based on your views and data model
         TextView textView = holder.nameTextView;
-        textView.setText(movie.getOriginalTitle());
+        textView.setText(movie.getTitle());
         ImageView imageView = holder.movieImage;
 //        imageView.setImageBitmap(movie.getImage());
     }

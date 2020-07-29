@@ -3,7 +3,9 @@ package com.example.imasdb;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -28,6 +30,8 @@ import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.recyclerview.animators.ScaleInAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,12 +72,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void prepareLists(MovieListBuilder movieListBuilder, ArrayList<RecyclerView> recyclerViews) {
         for (int i = 0; i < MovieListType.values().length; i++) {
+            RecyclerView recyclerView = recyclerViews.get(i);
             MovieListType movieListType = MovieListType.values()[i];
             movieListBuilder.getMovieList(movieListType, movieListType.adapter);
-            recyclerViews.get(i).setAdapter(movieListType.adapter);
+            recyclerView.setAdapter(movieListType.adapter);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+            SnapHelper snapHelper = new LinearSnapHelper();
+            snapHelper.attachToRecyclerView(recyclerView);
             linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-            recyclerViews.get(i).setLayoutManager(linearLayoutManager);
+            recyclerView.setLayoutManager(linearLayoutManager);
+            recyclerView.setItemAnimator(new SlideInLeftAnimator());
             Log.i("listDownloadStarted", "downloading");
         }
     }
