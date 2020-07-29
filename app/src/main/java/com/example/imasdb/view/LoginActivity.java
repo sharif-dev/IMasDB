@@ -62,12 +62,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loadSignUpPage() {
-//        String url = "http://www.google.com";
-//        Intent i = new Intent(Intent.ACTION_VIEW);
-//        i.setData(Uri.parse(url));
-//        startActivity(i);
-
-        Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
+        String url = "https://www.themoviedb.org/signup";
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
         startActivity(intent);
     }
 

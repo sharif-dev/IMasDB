@@ -22,16 +22,17 @@ public class SignUpActivity  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         webView = findViewById(R.id.web_view);
-        loadWebView();
+        String url = getIntent().getData().toString();
+        loadWebView(url);
     }
 
-    private void loadWebView() {
+    private void loadWebView(String url) {
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.canGoBack();
 
-        webView.loadUrl("http://google.com");
+        webView.loadUrl(url);
 
 
         final ProgressDialog progressBar = new ProgressDialog(SignUpActivity.this);
@@ -64,17 +65,17 @@ public class SignUpActivity  extends AppCompatActivity {
         });
 
 
-//        webView.setOnKeyListener(new View.OnKeyListener() {
-//
-//            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                if (keyCode == KeyEvent.KEYCODE_BACK
-//                        && event.getAction() == MotionEvent.ACTION_UP
-//                        && webView.canGoBack()) {
-//                    webView.goBack();
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
+        webView.setOnKeyListener(new View.OnKeyListener() {
+
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK
+                        && event.getAction() == MotionEvent.ACTION_UP
+                        && webView.canGoBack()) {
+                    webView.goBack();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 }
