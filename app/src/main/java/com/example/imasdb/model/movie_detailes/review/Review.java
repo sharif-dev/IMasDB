@@ -4,7 +4,7 @@ package com.example.imasdb.model.movie_detailes.review;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Result {
+public class Review {
 
     @SerializedName("id")
     @Expose

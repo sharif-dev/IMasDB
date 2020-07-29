@@ -1,6 +1,7 @@
 package com.example.imasdb;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
@@ -24,6 +25,7 @@ import com.example.imasdb.network.MovieListsApiEndpointInterface;
 import com.example.imasdb.network.RetrofitBuilder;
 import com.example.imasdb.view.LoginActivity;
 import com.example.imasdb.view.MovieAdapter;
+import com.example.imasdb.view.MovieFragment;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -79,7 +81,12 @@ public class MainActivity extends AppCompatActivity {
             movieListType.adapter.setOnClickListener(new MovieAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(Movie movie) {
-                    
+                    Log.e("click", "clicked");
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    Fragment fragment = MovieFragment.newInstance(movie);
+                    ft.replace(R.id.main_activity, fragment);
+                    ft.addToBackStack(null);
+                    ft.show(fragment);
                 }
             });
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

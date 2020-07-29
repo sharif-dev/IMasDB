@@ -15,7 +15,7 @@ public class Reviews {
     private Integer page;
     @SerializedName("results")
     @Expose
-    private List<Result> results = null;
+    private List<Review> reviews = null;
     @SerializedName("total_pages")
     @Expose
     private Integer totalPages;
@@ -39,12 +39,12 @@ public class Reviews {
         this.page = page;
     }
 
-    public List<Result> getResults() {
-        return results;
+    public List<Review> getReviews() {
+        return reviews;
     }
 
-    public void setResults(List<Result> results) {
-        this.results = results;
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
     public Integer getTotalPages() {

@@ -14,19 +14,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitBuilder {
     private static String baseUrl = "https://api.themoviedb.org/3/";
 
+    static Gson gson = new GsonBuilder().setLenient().create();
+    static Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create(gson)).build();
+
     public static AuthApiEndpointInterface getAuthApi() {
-        Gson gson = new GsonBuilder().setLenient().create();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create(gson)).build();
         return retrofit.create(AuthApiEndpointInterface.class);
     }
 
     public static MovieListsApiEndpointInterface getMovieApi() {
-        Gson gson = new GsonBuilder().setLenient().create();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create(gson)).build();
         return retrofit.create(MovieListsApiEndpointInterface.class);
+    }
+
+    public static MovieDetailsApi getMovieDetailApi() {
+        return retrofit.create(MovieDetailsApi.class);
     }
 }
