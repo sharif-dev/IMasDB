@@ -1,12 +1,20 @@
 
 package com.example.imasdb.model;
 
+import android.graphics.Bitmap;
+
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.example.imasdb.model.movie_detailes.*;
 
 public class Movie {
+
+    public Movie(String originalTitle) {
+        this.originalTitle = originalTitle;
+
+    }
 
     @SerializedName("adult")
     @Expose
@@ -284,4 +292,7 @@ public class Movie {
         this.voteCount = voteCount;
     }
 
+    public Bitmap getImage() {
+        return null;
+    }
 }

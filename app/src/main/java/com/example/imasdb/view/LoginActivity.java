@@ -26,6 +26,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.imasdb.network.RetrofitBuilder.getAuthApi;
+
 public class LoginActivity extends AppCompatActivity {
     Resources res;
 
@@ -52,17 +54,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private AuthApiEndpointInterface getAuthApi() {
-
-        Resources res = getResources();
-        String baseUrl = res.getString(R.string.base_url);
-        Gson gson = new GsonBuilder().setLenient().create();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create(gson)).build();
-        return retrofit.create(AuthApiEndpointInterface.class);
     }
 
     protected void login(String username, String password) {

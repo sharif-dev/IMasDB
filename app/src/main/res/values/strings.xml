@@ -14,5 +14,6 @@
     <string name="password">password</string>
     <string name="login">login</string>
     <string name="base_url">https://api.themoviedb.org/3/</string>
-    <string name="api_key">xxx</string>
+    <string name="api_key">d8bc38ce00cdce9cbe04ac602f29ffbc</string>
+    <string name="movie_name">TextView</string>
 </resources>

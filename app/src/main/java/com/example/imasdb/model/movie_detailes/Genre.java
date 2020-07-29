@@ -1,5 +1,5 @@
 
-package com.example.imasdb.model;
+package com.example.imasdb.model.movie_detailes;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
