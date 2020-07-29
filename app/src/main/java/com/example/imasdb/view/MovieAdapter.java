@@ -11,12 +11,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.imasdb.network.DownloadImageTask;
 import com.example.imasdb.R;
 import com.example.imasdb.model.Movie;
 
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
+
+    private String imageBaseUrl = "https://image.tmdb.org/t/p/w92";
 
     public void addAll(List<Movie> results) {
         mMovies.addAll(results);
@@ -65,6 +68,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         TextView textView = holder.nameTextView;
         textView.setText(movie.getTitle());
         ImageView imageView = holder.movieImage;
+        DownloadImageTask downloadImageTask = new DownloadImageTask(imageView);
+        downloadImageTask.execute(imageBaseUrl + movie.getPosterPath());
 //        imageView.setImageBitmap(movie.getImage());
     }
 

@@ -9,21 +9,22 @@ import android.widget.ImageView;
 import java.io.InputStream;
 import java.net.URL;
 
-class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     ImageView bmImage;
 
-    DownloadImageTask(ImageView bmImage) {
+    public DownloadImageTask(ImageView bmImage) {
         this.bmImage = bmImage;
     }
 
-    protected Bitmap doInBackground(String... urls) {
+    public Bitmap doInBackground(String... urls) {
         String urldisplay = urls[0];
         Bitmap mIcon11 = null;
         try {
+            Log.i("url", urls[0]);
             InputStream in = new URL(urldisplay).openStream();
             mIcon11 = BitmapFactory.decodeStream(in);
         } catch (Exception e) {
-            Log.e("Error", e.getMessage());
+//            Log.e("Error", e.);
             e.printStackTrace();
         }
         return mIcon11;

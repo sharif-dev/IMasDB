@@ -9,6 +9,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.Streaming;
 
 public interface MovieListsApiEndpointInterface {
 
@@ -20,4 +21,5 @@ public interface MovieListsApiEndpointInterface {
 
     @GET("movie/top_rated")
     Call<MovieList> getTopRated(@Query("api_key") String apiKey);
+
 }
