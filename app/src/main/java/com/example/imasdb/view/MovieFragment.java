@@ -3,11 +3,15 @@ package com.example.imasdb.view;
 import android.content.res.Resources;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.imasdb.R;
@@ -16,6 +20,7 @@ import com.example.imasdb.model.movie_detailes.cast.Cast;
 import com.example.imasdb.model.movie_detailes.cast.CastsList;
 import com.example.imasdb.model.movie_detailes.review.Review;
 import com.example.imasdb.model.movie_detailes.review.Reviews;
+import com.example.imasdb.network.DownloadImageTask;
 import com.example.imasdb.network.MovieDetailsApi;
 import com.example.imasdb.network.RetrofitBuilder;
 
@@ -25,42 +30,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MovieFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MovieFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//    private static final Movie ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-//    private String mParam1;
-//    private String mParam2;
     private Movie movie;
     public Resources res;
+    private String imageBaseUrl = "https://image.tmdb.org/t/p/w342";
 
     public MovieFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     * <p>
-     * //     * @param param1 Parameter 1.
-     * //     * @param param2 Parameter 2.
-     *
-     * @return A new instance of fragment MovieFragment.
-     */
     public static MovieFragment newInstance(Movie movie) {
         MovieFragment fragment = new MovieFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
         args.putSerializable("movie", movie);
         fragment.setArguments(args);
         return fragment;
@@ -72,9 +54,15 @@ public class MovieFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                getParentFragment().getChildFragmentManager().popBackStack();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
         if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
             movie = (Movie) getArguments().getSerializable("movie");
         }
     }
@@ -85,26 +73,42 @@ public class MovieFragment extends Fragment {
         // Inflate the layout for this fragment
         res = getResources();
         View view = inflater.inflate(R.layout.fragment_movie, container, false);
+        TextView pop = view.findViewById(R.id.popularityText);
+        pop.setText(movie.getPopularity().intValue() + "");
+        TextView year = view.findViewById(R.id.production_year);
+        year.setText("( " + movie.getReleaseDate() + " )");
+        TextView name = view.findViewById(R.id.movieNameText);
+        name.setText(movie.getTitle());
         TextView summary = view.findViewById(R.id.summaryText);
         summary.setText(movie.getOverview());
         TextView ratings = view.findViewById(R.id.ratingNumber);
         ratings.setText(String.valueOf(movie.getVoteAverage()));
+        ImageView imageView = view.findViewById(R.id.movieImage);
+        DownloadImageTask downloadImageTask = new DownloadImageTask(imageView);
+        downloadImageTask.execute(imageBaseUrl + movie.getPosterPath());
         casts = view.findViewById(R.id.actors);
         reviews = view.findViewById(R.id.reviewText);
+        setMovieCastsAndReviews();
+//        getFragmentManager().popBackStack();
         return view;
 
     }
 
     private void setMovieCastsAndReviews() {
         MovieDetailsApi movieDetailsApi = RetrofitBuilder.getMovieDetailApi();
-        Call<CastsList> castsListCall = movieDetailsApi.getCastsList(String.valueOf(movie.getId()), res.getString(R.string.api_key));
-        Call<Reviews> reviewsCall = movieDetailsApi.getReviews(String.valueOf(movie.getId()), res.getString(R.string.api_key));
+        Call<CastsList> castsListCall = movieDetailsApi.getCastsList(movie.getId(), res.getString(R.string.api_key));
+        Call<Reviews> reviewsCall = movieDetailsApi.getReviews(movie.getId(), res.getString(R.string.api_key));
         castsListCall.enqueue(new Callback<CastsList>() {
             @Override
             public void onResponse(Call<CastsList> call, Response<CastsList> response) {
-                CastsList castsList = response.body();
-                if (castsList != null) {
-                    setCasts(castsList.getCast().subList(0, 7));
+                if (response.isSuccessful()) {
+                    CastsList castsList = response.body();
+                    if (castsList != null) {
+                        setCasts(castsList.getCast().subList(0, 7));
+                        Log.e("casts, get", String.valueOf(response.message()));
+                    }
+                } else {
+
                 }
             }
 
@@ -132,16 +136,17 @@ public class MovieFragment extends Fragment {
     private void setCasts(List<Cast> casts) {
         StringBuilder builder = new StringBuilder();
         for (Cast cast : casts) {
-            builder = builder.append(cast.getName()).append(" as : ").append(cast.getCharacter()).append("\n");
+            builder = builder.append(cast.getName()).append(" as : ").append(cast.getCharacter()).append("\n\n");
         }
         this.casts.setText(builder.toString());
+        Log.e("setCasts", builder.toString());
 
     }
 
     private void setReviews(List<Review> reviews) {
         StringBuilder builder = new StringBuilder();
         for (Review review : reviews) {
-            builder = builder.append(review.getAuthor()).append(" : ").append(review.getContent()).append("\n");
+            builder = builder.append(review.getAuthor()).append(" : ").append(review.getContent()).append("\n\n");
         }
         this.reviews.setText(builder.toString());
     }

@@ -21,4 +21,6 @@
     <string name="most_popular_movies">most popular movies</string>
     <string name="top_rated_movies">top rated movies</string>
     <string name="summary">summary</string>
+    <string name="synopsis">synopsis</string>
+    <string name="movie">movie</string>
 </resources>

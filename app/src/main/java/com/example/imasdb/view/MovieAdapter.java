@@ -94,7 +94,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         ImageView imageView = holder.movieImage;
         DownloadImageTask downloadImageTask = new DownloadImageTask(imageView);
         downloadImageTask.execute(imageBaseUrl + movie.getPosterPath());
-//        imageView.setImageBitmap(movie.getImage());
+        imageView.setImageBitmap(movie.getImage());
     }
 
     @Override
