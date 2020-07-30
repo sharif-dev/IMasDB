@@ -83,7 +83,6 @@ public class ListsFragment extends Fragment {
         mostPopular = listFragment.findViewById(R.id.most_popular_recycler);
         topRated = listFragment.findViewById(R.id.top_rated_recycler);
         res = getResources();
-
         ArrayList<RecyclerView> recyclerViews = setAdapters();
         MovieListBuilder movieListBuilder = new MovieListBuilder(res.getString(R.string.api_key));
         prepareLists(movieListBuilder, recyclerViews);
@@ -105,7 +104,6 @@ public class ListsFragment extends Fragment {
                     Fragment fragment = MovieFragment.newInstance(movie);
                     ft.replace(R.id.lists_fragment, fragment);
                     ft.addToBackStack(null);
-
                     ft.commit();
                 }
             });

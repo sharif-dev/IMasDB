@@ -19,6 +19,7 @@ public class RetrofitBuilder {
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create(gson)).build();
 
+
     public static AuthApiEndpointInterface getAuthApi() {
         return retrofit.create(AuthApiEndpointInterface.class);
     }
