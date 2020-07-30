@@ -9,9 +9,9 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface MovieDetailsApi {
-    @GET("/movie/{movie_id}/credits")
-    Call<CastsList> getCastsList(@Path("movie_id") String movieId, @Query("api_key") String apiKey);
+    @GET("movie/{movie_id}/credits")
+    Call<CastsList> getCastsList(@Path("movie_id") int movieId, @Query("api_key") String apiKey);
 
-    @GET("/movie/{movie_id}/reviews")
-    Call<Reviews> getReviews(@Path("movie_id") String movieId, @Query("api_key") String apiKey);
+    @GET("movie/{movie_id}/reviews")
+    Call<Reviews> getReviews(@Path("movie_id") int movieId, @Query("api_key") String apiKey);
 }
