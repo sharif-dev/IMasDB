@@ -103,13 +103,9 @@ public class ListsFragment extends Fragment {
                     Log.e("click", "clicked");
                     FragmentTransaction ft = getChildFragmentManager().beginTransaction();
                     Fragment fragment = MovieFragment.newInstance(movie);
-//                    ft.hide(ListsFragment.this);
                     ft.replace(R.id.lists_fragment, fragment);
                     ft.addToBackStack(null);
-//                    fragment.setAllowReturnTransitionOverlap(true);
-//                    ft.hide(ListsFragment.this);
-//                    ft.addToBackStack(null);
-//                    ft.show(fragment);
+
                     ft.commit();
                 }
             });
@@ -129,19 +125,6 @@ public class ListsFragment extends Fragment {
         res.add(mostPopular);
         res.add(topRated);
         return res;
-        //        List<Movie> mm = movieListBuilder.lat;
-//        recent.setAdapter(new MovieAdapter(movieListBuilder.lat));
-//        movieListBuilder.setAdapters(recent.getAdapter());
-//        recent.getAdapter().notifyDataSetChanged();
-//        recent.setLayoutManager(layoutManager);
-////
-//        RecyclerView pop = findViewById(R.id.most_popular_recycler);
-//        pop.setAdapter(new MovieAdapter(movieListBuilder.mostPop.results));
-//        pop.setLayoutManager(layoutManager);
-//
-//        RecyclerView topRated = findViewById(R.id.top_rated_recycler);
-//        topRated.setAdapter(new MovieAdapter(movieListBuilder.topRated.results));
-//        topRated.setLayoutManager(layoutManager);
 
     }
 }

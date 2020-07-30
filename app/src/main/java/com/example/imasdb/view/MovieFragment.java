@@ -3,6 +3,7 @@ package com.example.imasdb.view;
 import android.content.res.Resources;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.example.imasdb.model.movie_detailes.cast.Cast;
 import com.example.imasdb.model.movie_detailes.cast.CastsList;
 import com.example.imasdb.model.movie_detailes.review.Review;
 import com.example.imasdb.model.movie_detailes.review.Reviews;
+import com.example.imasdb.network.DownloadImageTask;
 import com.example.imasdb.network.MovieDetailsApi;
 import com.example.imasdb.network.RetrofitBuilder;
 
@@ -32,6 +34,7 @@ public class MovieFragment extends Fragment {
 
     private Movie movie;
     public Resources res;
+    private String imageBaseUrl = "https://image.tmdb.org/t/p/w342";
 
     public MovieFragment() {
         // Required empty public constructor
@@ -51,9 +54,15 @@ public class MovieFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                getParentFragment().getChildFragmentManager().popBackStack();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
         if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
             movie = (Movie) getArguments().getSerializable("movie");
         }
     }
@@ -64,17 +73,19 @@ public class MovieFragment extends Fragment {
         // Inflate the layout for this fragment
         res = getResources();
         View view = inflater.inflate(R.layout.fragment_movie, container, false);
+        TextView pop = view.findViewById(R.id.popularityText);
+        pop.setText(movie.getPopularity().intValue() + "");
+        TextView year = view.findViewById(R.id.production_year);
+        year.setText("( " + movie.getReleaseDate() + " )");
+        TextView name = view.findViewById(R.id.movieNameText);
+        name.setText(movie.getTitle());
         TextView summary = view.findViewById(R.id.summaryText);
         summary.setText(movie.getOverview());
         TextView ratings = view.findViewById(R.id.ratingNumber);
         ratings.setText(String.valueOf(movie.getVoteAverage()));
-        ImageView back = view.findViewById(R.id.back_movie_button);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getParentFragment().getChildFragmentManager().popBackStack();
-            }
-        });
+        ImageView imageView = view.findViewById(R.id.movieImage);
+        DownloadImageTask downloadImageTask = new DownloadImageTask(imageView);
+        downloadImageTask.execute(imageBaseUrl + movie.getPosterPath());
         casts = view.findViewById(R.id.actors);
         reviews = view.findViewById(R.id.reviewText);
         setMovieCastsAndReviews();
@@ -125,7 +136,7 @@ public class MovieFragment extends Fragment {
     private void setCasts(List<Cast> casts) {
         StringBuilder builder = new StringBuilder();
         for (Cast cast : casts) {
-            builder = builder.append(cast.getName()).append(" as : ").append(cast.getCharacter()).append("\n");
+            builder = builder.append(cast.getName()).append(" as : ").append(cast.getCharacter()).append("\n\n");
         }
         this.casts.setText(builder.toString());
         Log.e("setCasts", builder.toString());
@@ -135,7 +146,7 @@ public class MovieFragment extends Fragment {
     private void setReviews(List<Review> reviews) {
         StringBuilder builder = new StringBuilder();
         for (Review review : reviews) {
-            builder = builder.append(review.getAuthor()).append(" : ").append(review.getContent()).append("\n");
+            builder = builder.append(review.getAuthor()).append(" : ").append(review.getContent()).append("\n\n");
         }
         this.reviews.setText(builder.toString());
     }

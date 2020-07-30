@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:isScrollContainer="true"
         android:scrollY="@dimen/activity_horizontal_margin"
+        android:background="@color/backgroundDark"
         android:scrollbarTrackVertical="@dimen/activity_horizontal_margin"
         tools:context=".MainActivity">
 
@@ -20,6 +21,7 @@
             android:id="@+id/recently_played_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:layout_marginTop="188dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
