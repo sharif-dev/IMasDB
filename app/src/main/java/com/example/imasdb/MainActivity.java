@@ -8,12 +8,19 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.imasdb.model.Movie;
@@ -44,6 +51,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MAIN_ACTIVITY";
+
     public enum LoginLaunchType {
         LOGIN, LOGOUT
     }
@@ -51,8 +60,9 @@ public class MainActivity extends AppCompatActivity {
     private Resources res;
     List<Movie> m = new ArrayList<Movie>();
 
+    private Activity context;
 
-    //    RecyclerView recent;
+    //        RecyclerView recent;
 //    RecyclerView recent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +72,10 @@ public class MainActivity extends AppCompatActivity {
 //        if (!getIntent().hasExtra("loginCompleted")) {
 //            launchComposeView(LoginLaunchType.LOGIN);
 //        }
-
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.main_activity, new ListsFragment());
-        ft.commit();
+        context = this;
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        ft.replace(R.id.main_activity, new ListsFragment());
+//        ft.commit();
 
     }
 
@@ -84,5 +94,23 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         getSupportFragmentManager().popBackStack();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+        Log.i(TAG, "onCreateOptionsMenu: ");
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getTitle().equals("search")) {
+            Log.i(TAG, "onOptionsItemSelected: "+item.getTitle());
+            return onSearchRequested();
+        } else {
+            return false;
+        }
     }
 }

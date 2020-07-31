@@ -97,18 +97,7 @@ public class ListsFragment extends Fragment {
             MovieListType movieListType = MovieListType.values()[i];
             movieListBuilder.getMovieList(movieListType, movieListType.adapter);
             recyclerView.setAdapter(movieListType.adapter);
-            movieListType.adapter.setOnClickListener(new MovieAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(Movie movie) {
-                    Log.e("click", "clicked");
-                    FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-                    Fragment fragment = MovieFragment.newInstance(movie);
-                    ft.replace(R.id.lists_fragment, fragment);
-                    ft.addToBackStack(null);
-
-                    ft.commit();
-                }
-            });
+            movieListType.adapter.setOnClickListener(onMovieClickListener);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             SnapHelper snapHelper = new LinearSnapHelper();
             snapHelper.attachToRecyclerView(recyclerView);
@@ -118,6 +107,19 @@ public class ListsFragment extends Fragment {
             Log.i("listDownloadStarted", "downloading");
         }
     }
+
+    private MovieAdapter.OnItemClickListener onMovieClickListener = new MovieAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(Movie movie) {
+            Log.e("click", "clicked");
+            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+            Fragment fragment = MovieFragment.newInstance(movie);
+            ft.replace(R.id.lists_fragment, fragment);
+            ft.addToBackStack(null);
+
+            ft.commit();
+        }
+    };
 
     public ArrayList<RecyclerView> setAdapters() {
         ArrayList<RecyclerView> res = new ArrayList<>();

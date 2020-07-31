@@ -16,7 +16,6 @@
         android:contentDescription="@string/movie_name"
         android:src="@drawable/movie_image_drawable" />
     <!--        app:srcCompat="@drawable/ic_launcher_background" />-->
-
     <TextView
         android:id="@+id/movieNameText"
         android:layout_width="match_parent"
