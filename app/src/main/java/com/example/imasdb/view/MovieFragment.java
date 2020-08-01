@@ -7,7 +7,6 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +19,9 @@ import com.example.imasdb.model.movie_detailes.cast.Cast;
 import com.example.imasdb.model.movie_detailes.cast.CastsList;
 import com.example.imasdb.model.movie_detailes.review.Review;
 import com.example.imasdb.model.movie_detailes.review.Reviews;
-import com.example.imasdb.network.DownloadImageTask;
 import com.example.imasdb.network.MovieDetailsApi;
 import com.example.imasdb.network.RetrofitBuilder;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -84,8 +83,7 @@ public class MovieFragment extends Fragment {
         TextView ratings = view.findViewById(R.id.ratingNumber);
         ratings.setText(String.valueOf(movie.getVoteAverage()));
         ImageView imageView = view.findViewById(R.id.movieImage);
-        DownloadImageTask downloadImageTask = new DownloadImageTask(imageView);
-        downloadImageTask.execute(imageBaseUrl + movie.getPosterPath());
+        Picasso.with(imageView.getContext()).load(imageBaseUrl+movie.getPosterPath()).into(imageView);
         casts = view.findViewById(R.id.actors);
         reviews = view.findViewById(R.id.reviewText);
         setMovieCastsAndReviews();

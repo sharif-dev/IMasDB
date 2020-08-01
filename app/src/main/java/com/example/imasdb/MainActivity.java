@@ -102,15 +102,13 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
         Log.i(TAG, "onCreateOptionsMenu: ");
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.search_view).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getTitle().equals("search")) {
-            Log.i(TAG, "onOptionsItemSelected: "+item.getTitle());
-            return onSearchRequested();
-        } else {
-            return false;
-        }
-    }
+
 }

@@ -5,31 +5,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.imasdb.network.DownloadImageTask;
 import com.example.imasdb.R;
 import com.example.imasdb.model.Movie;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
-    private String imageBaseUrl = "https://image.tmdb.org/t/p/w92";
+    private String imageBaseUrl = "https://image.tmdb.org/t/p/w342";
 
-    public void addAll(List<Movie> results) {
-        mMovies.addAll(results);
-        this.notifyDataSetChanged();
+    private List<Movie> mMovies;
+
+    public MovieAdapter(List<Movie> movies) {
+        mMovies = movies;
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(Movie movie);
-    }
 
     private OnItemClickListener listener;
 
@@ -47,7 +44,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
-
             nameTextView = (TextView) itemView.findViewById(R.id.movieNameText);
             movieImage = (ImageView) itemView.findViewById(R.id.movieImage);
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -66,12 +62,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     }
 
-    private List<Movie> mMovies;
-
-    public MovieAdapter(List<Movie> movies) {
-        mMovies = movies;
-    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -88,18 +78,24 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Movie movie = mMovies.get(position);
-        // Set item views based on your views and data model
         TextView textView = holder.nameTextView;
         textView.setText(movie.getTitle());
         ImageView imageView = holder.movieImage;
-        DownloadImageTask downloadImageTask = new DownloadImageTask(imageView);
-        downloadImageTask.execute(imageBaseUrl + movie.getPosterPath());
-        imageView.setImageBitmap(movie.getImage());
+        Picasso.with(imageView.getContext()).load(imageBaseUrl+movie.getPosterPath()).into(imageView);
+
     }
 
     @Override
     public int getItemCount() {
         return mMovies.size();
+    }
+    public void addAll(List<Movie> results) {
+        mMovies.addAll(results);
+        this.notifyDataSetChanged();
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Movie movie);
     }
 
 }

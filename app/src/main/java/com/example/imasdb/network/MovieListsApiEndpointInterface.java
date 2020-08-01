@@ -22,4 +22,9 @@ public interface MovieListsApiEndpointInterface {
     @GET("movie/top_rated")
     Call<MovieList> getTopRated(@Query("api_key") String apiKey);
 
+    @GET("search/movie")
+    Call<MovieList> getSearchResults(@Query("api_key") String apikey,@Query("query") String query);
+
+
+
 }
