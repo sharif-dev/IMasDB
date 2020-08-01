@@ -19,6 +19,16 @@ import java.util.ArrayList;
 public class SearchResultAdapter extends ArrayAdapter<Movie> {
     private String imageBaseUrl = "https://image.tmdb.org/t/p/w92";
 
+    private SearchResultAdapter.OnItemClickListener listener;
+
+    public void setOnClickListener(SearchResultAdapter.OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Movie movie);
+    }
+
     private static class ViewHolder {
         public ImageView ivCover;
         public TextView tvTitle;
@@ -46,6 +56,12 @@ public class SearchResultAdapter extends ArrayAdapter<Movie> {
         }
         viewHolder.tvTitle.setText(movie.getTitle());
         viewHolder.tvReleaseDate.setText(movie.getReleaseDate());
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(movie);
+            }
+        });
         Picasso.with(getContext()).load(imageBaseUrl+movie.getPosterPath()).into(viewHolder.ivCover);
         return convertView;
         //TODO:add no image default cover

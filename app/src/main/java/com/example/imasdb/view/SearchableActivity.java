@@ -2,13 +2,18 @@ package com.example.imasdb.view;
 
 import android.app.ListActivity;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.imasdb.MainActivity;
 import com.example.imasdb.R;
 import com.example.imasdb.model.Movie;
 import com.example.imasdb.model.MovieList;
@@ -30,10 +35,18 @@ public class SearchableActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_searchable);
+        setContentView(R.layout.fragment_search_res);
         Log.i(TAG, "onCreate: ");
         searchResultLv = findViewById(R.id.search_result_lv);
         adapter = new SearchResultAdapter(this,new ArrayList<Movie>());
+        adapter.setOnClickListener(new SearchResultAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Movie movie) {
+                Log.i(TAG, "onItemClick: "+movie);
+                Intent intent = new Intent(SearchableActivity.this, MainActivity.class);
+                intent.putExtra("searchRes",movie);
+                startActivity(intent);            }
+        });
         searchResultLv.setAdapter(adapter);
         Intent intent = getIntent();
         handleIntent(intent);
@@ -79,4 +92,23 @@ public class SearchableActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search_view).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchQuery(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return true;
+    }
 }

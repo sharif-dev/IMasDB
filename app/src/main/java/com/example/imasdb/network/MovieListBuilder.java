@@ -2,18 +2,13 @@ package com.example.imasdb.network;
 
 import android.util.Log;
 
-import androidx.arch.core.util.Function;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.imasdb.MainActivity;
-import com.example.imasdb.R;
 import com.example.imasdb.model.Movie;
 import com.example.imasdb.model.MovieList;
 import com.example.imasdb.model.MovieListType;
-import com.example.imasdb.view.MovieAdapter;
+import com.example.imasdb.view.MovieListAdapter;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +41,7 @@ public class MovieListBuilder {
 
     }
 
-    public void getMovieList(MovieListType movieListType, MovieAdapter adapter) {
+    public void getMovieList(MovieListType movieListType, MovieListAdapter adapter) {
 
         MovieListsApiEndpointInterface movieListsApi = RetrofitBuilder.getMovieApi();
         switch (movieListType) {
@@ -66,7 +61,7 @@ public class MovieListBuilder {
 
     }
 
-    private void setEnqueue(Call<MovieList> enqueueList, final MovieListType listType, final MovieAdapter adapter) {
+    private void setEnqueue(Call<MovieList> enqueueList, final MovieListType listType, final MovieListAdapter adapter) {
         enqueueList.enqueue(new Callback<MovieList>() {
             @Override
             public void onResponse(Call<MovieList> call, Response<MovieList> response) {
