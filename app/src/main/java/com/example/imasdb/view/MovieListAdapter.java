@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,8 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.imasdb.R;
 import com.example.imasdb.model.Movie;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.security.PublicKey;
 import java.util.List;
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.ViewHolder> {
@@ -41,7 +44,6 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
         public ImageView movieImage;
-
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
@@ -84,8 +86,8 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
         Movie movie = mMovies.get(position);
         TextView textView = holder.nameTextView;
         textView.setText(movie.getTitle());
-        ImageView imageView = holder.movieImage;
-        Picasso.with(imageView.getContext()).load(imageBaseUrl+movie.getPosterPath()).into(imageView);
+        final ImageView imageView = holder.movieImage;
+        Picasso.get().load(imageBaseUrl+movie.getPosterPath()).placeholder(R.drawable.loading_placeholder).error(R.drawable.ic_baseline_image_24).into(imageView);
 
     }
 

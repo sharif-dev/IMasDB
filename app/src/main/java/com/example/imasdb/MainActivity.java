@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Activity context;
 
-    //        RecyclerView recent;
-//    RecyclerView recent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "onCreate: ");
         handleIntent(getIntent());
     }
+
     private void handleIntent(Intent intent){
         //        if (!intent.hasExtra("loginCompleted")) {
 //            launchComposeView(LoginLaunchType.LOGIN);
@@ -94,13 +93,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
-        Log.i(TAG, "onCreateOptionsMenu: ");
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.search_view).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search_view).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
 

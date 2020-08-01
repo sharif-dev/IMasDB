@@ -76,7 +76,7 @@ public class MovieFragment extends Fragment {
         TextView ratings = view.findViewById(R.id.ratingNumber);
         ratings.setText(String.valueOf(movie.getVoteAverage()));
         ImageView imageView = view.findViewById(R.id.movieImage);
-        Picasso.with(imageView.getContext()).load(imageBaseUrl+movie.getPosterPath()).into(imageView);
+        Picasso.get().load(imageBaseUrl+movie.getPosterPath()).placeholder(R.drawable.loading_placeholder).error(R.drawable.ic_baseline_image_24).into(imageView);
         casts = view.findViewById(R.id.actors);
         reviews = view.findViewById(R.id.reviewText);
         setMovieCastsAndReviews();

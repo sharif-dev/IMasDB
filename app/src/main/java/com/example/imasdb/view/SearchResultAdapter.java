@@ -6,12 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.example.imasdb.R;
 import com.example.imasdb.model.Movie;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public class SearchResultAdapter extends ArrayAdapter<Movie> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Movie movie = getItem(position);
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -62,7 +64,7 @@ public class SearchResultAdapter extends ArrayAdapter<Movie> {
                 listener.onItemClick(movie);
             }
         });
-        Picasso.with(getContext()).load(imageBaseUrl+movie.getPosterPath()).into(viewHolder.ivCover);
+        Picasso.get().load(imageBaseUrl+movie.getPosterPath()).placeholder(R.drawable.loading_placeholder).error(R.drawable.ic_baseline_image_24).into(viewHolder.ivCover);
         return convertView;
         //TODO:add no image default cover
         //TODO:add onCLickListeners
