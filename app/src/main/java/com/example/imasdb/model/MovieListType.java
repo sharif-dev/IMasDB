@@ -1,17 +1,15 @@
 package com.example.imasdb.model;
 
-import android.widget.Adapter;
-
-import com.example.imasdb.view.MovieAdapter;
+import com.example.imasdb.view.MovieListAdapter;
 
 import java.util.ArrayList;
 
 public enum MovieListType {
-    LATEST(0, new MovieAdapter(new ArrayList<Movie>())), TOP_RATED(1, new MovieAdapter(new ArrayList<Movie>())), MOST_POPULAR(2, new MovieAdapter(new ArrayList<Movie>()));
+    LATEST(0, new MovieListAdapter(new ArrayList<Movie>())), TOP_RATED(1, new MovieListAdapter(new ArrayList<Movie>())), MOST_POPULAR(2, new MovieListAdapter(new ArrayList<Movie>()));
     public int index;
-    public MovieAdapter adapter;
+    public MovieListAdapter adapter;
 
-    MovieListType(int i, MovieAdapter adapter) {
+    MovieListType(int i, MovieListAdapter adapter) {
         this.adapter = adapter;
         this.index = i;
 

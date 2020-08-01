@@ -5,10 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment
-        android:name="com.example.imasdb.view.ListsFragment"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/lists_fragment" />
+        android:id="@+id/fl_main_fragment" />
 
 </ScrollView>

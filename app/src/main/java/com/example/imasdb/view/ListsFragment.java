@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +42,11 @@ public class ListsFragment extends Fragment {
     RecyclerView mostPopular;
     RecyclerView topRated;
     Resources res;
+    private MovieListAdapter.OnItemClickListener listener;
+
+    public void setOnClickListener(MovieListAdapter.OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public ListsFragment() {
         // Required empty public constructor
@@ -86,7 +90,6 @@ public class ListsFragment extends Fragment {
         ArrayList<RecyclerView> recyclerViews = setAdapters();
         MovieListBuilder movieListBuilder = new MovieListBuilder(res.getString(R.string.api_key));
         prepareLists(movieListBuilder, recyclerViews);
-
         return listFragment;
     }
 
@@ -96,17 +99,7 @@ public class ListsFragment extends Fragment {
             MovieListType movieListType = MovieListType.values()[i];
             movieListBuilder.getMovieList(movieListType, movieListType.adapter);
             recyclerView.setAdapter(movieListType.adapter);
-            movieListType.adapter.setOnClickListener(new MovieAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(Movie movie) {
-                    Log.e("click", "clicked");
-                    FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-                    Fragment fragment = MovieFragment.newInstance(movie);
-                    ft.replace(R.id.lists_fragment, fragment);
-                    ft.addToBackStack(null);
-                    ft.commit();
-                }
-            });
+            movieListType.adapter.setOnClickListener(this.listener);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             SnapHelper snapHelper = new LinearSnapHelper();
             snapHelper.attachToRecyclerView(recyclerView);

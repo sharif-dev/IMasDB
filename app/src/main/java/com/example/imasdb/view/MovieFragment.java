@@ -36,7 +36,7 @@ public class MovieFragment extends Fragment {
     private String imageBaseUrl = "https://image.tmdb.org/t/p/w342";
 
     public MovieFragment() {
-        // Required empty public constructor
+
     }
 
     public static MovieFragment newInstance(Movie movie) {
@@ -53,13 +53,6 @@ public class MovieFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                getParentFragment().getChildFragmentManager().popBackStack();
-            }
-        };
-        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 
         if (getArguments() != null) {
             movie = (Movie) getArguments().getSerializable("movie");
