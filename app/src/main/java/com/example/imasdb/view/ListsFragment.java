@@ -83,7 +83,6 @@ public class ListsFragment extends Fragment {
         mostPopular = listFragment.findViewById(R.id.most_popular_recycler);
         topRated = listFragment.findViewById(R.id.top_rated_recycler);
         res = getResources();
-
         ArrayList<RecyclerView> recyclerViews = setAdapters();
         MovieListBuilder movieListBuilder = new MovieListBuilder(res.getString(R.string.api_key));
         prepareLists(movieListBuilder, recyclerViews);
@@ -97,7 +96,17 @@ public class ListsFragment extends Fragment {
             MovieListType movieListType = MovieListType.values()[i];
             movieListBuilder.getMovieList(movieListType, movieListType.adapter);
             recyclerView.setAdapter(movieListType.adapter);
-            movieListType.adapter.setOnClickListener(onMovieClickListener);
+            movieListType.adapter.setOnClickListener(new MovieAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Movie movie) {
+                    Log.e("click", "clicked");
+                    FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+                    Fragment fragment = MovieFragment.newInstance(movie);
+                    ft.replace(R.id.lists_fragment, fragment);
+                    ft.addToBackStack(null);
+                    ft.commit();
+                }
+            });
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             SnapHelper snapHelper = new LinearSnapHelper();
             snapHelper.attachToRecyclerView(recyclerView);
@@ -105,19 +114,6 @@ public class ListsFragment extends Fragment {
             recyclerView.setLayoutManager(linearLayoutManager);
             recyclerView.setItemAnimator(new SlideInLeftAnimator());
             Log.i("listDownloadStarted", "downloading");
-        }
-    }
-
-    private MovieAdapter.OnItemClickListener onMovieClickListener = new MovieAdapter.OnItemClickListener() {
-        @Override
-        public void onItemClick(Movie movie) {
-            Log.e("click", "clicked");
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            Fragment fragment = MovieFragment.newInstance(movie);
-            ft.replace(R.id.lists_fragment, fragment);
-            ft.addToBackStack(null);
-
-            ft.commit();
         }
     };
 

@@ -87,7 +87,7 @@ public class MovieFragment extends Fragment {
         casts = view.findViewById(R.id.actors);
         reviews = view.findViewById(R.id.reviewText);
         setMovieCastsAndReviews();
-//        getFragmentManager().popBackStack();
+        Log.e("hello", "s");
         return view;
 
     }
