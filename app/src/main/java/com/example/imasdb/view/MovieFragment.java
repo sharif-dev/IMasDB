@@ -11,10 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.imasdb.R;
 import com.example.imasdb.model.Movie;
+import com.example.imasdb.model.User;
 import com.example.imasdb.model.movie_detailes.cast.Cast;
 import com.example.imasdb.model.movie_detailes.cast.CastsList;
 import com.example.imasdb.model.movie_detailes.review.Review;
@@ -24,6 +27,7 @@ import com.example.imasdb.network.RetrofitBuilder;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -75,14 +79,44 @@ public class MovieFragment extends Fragment {
         summary.setText(movie.getOverview());
         TextView ratings = view.findViewById(R.id.ratingNumber);
         ratings.setText(String.valueOf(movie.getVoteAverage()));
+        RatingBar ratingBar = view.findViewById(R.id.ratingBar);
+        setupRatingBar(ratingBar);
+
         ImageView imageView = view.findViewById(R.id.movieImage);
-        Picasso.get().load(imageBaseUrl+movie.getPosterPath()).placeholder(R.drawable.loading_placeholder).error(R.drawable.ic_baseline_image_24).into(imageView);
+        Picasso.get().load(imageBaseUrl + movie.getPosterPath()).placeholder(R.drawable.loading_placeholder).error(R.drawable.ic_baseline_image_24).into(imageView);
         casts = view.findViewById(R.id.actors);
         reviews = view.findViewById(R.id.reviewText);
         setMovieCastsAndReviews();
         Log.e("hello", "s");
         return view;
 
+    }
+
+    private void setupRatingBar(RatingBar ratingBar) {
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                MovieDetailsApi api = RetrofitBuilder.getMovieDetailApi();
+                Call<Object> rate = api.rateMovie(movie.getId(), res.getString(R.string.api_key), User.getUser().getSessionToken().getSessionId(), (int) v * 2);
+                rate.enqueue(new Callback<Object>() {
+                    @Override
+                    public void onResponse(Call<Object> call, Response<Object> response) {
+                        if (response.code() != 200) {
+                            Log.e("failed rating", response.message() + response.code() + response.body());
+                            Toast.makeText(getContext(), "rating failed! try again later", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Object> call, Throwable t) {
+                        Log.e("failed rating", Objects.requireNonNull(t.getMessage()));
+
+                        Toast.makeText(getContext(), "rating failed! try again later", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            }
+        });
     }
 
     private void setMovieCastsAndReviews() {
@@ -95,7 +129,8 @@ public class MovieFragment extends Fragment {
                 if (response.isSuccessful()) {
                     CastsList castsList = response.body();
                     if (castsList != null) {
-                        setCasts(castsList.getCast().subList(0, 7));
+                        setCasts(castsList.getCast().
+                                subList(0, castsList.getCast().size() < 8 ? castsList.getCast().size() : 7));
                         Log.e("casts, get", String.valueOf(response.message()));
                     }
                 } else {

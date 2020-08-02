@@ -32,3 +32,4 @@ public class RetrofitBuilder {
         return retrofit.create(MovieDetailsApi.class);
     }
 }
+
