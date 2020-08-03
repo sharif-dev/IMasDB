@@ -17,25 +17,21 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.ViewHolder> {
+public class TrendListAdapter extends RecyclerView.Adapter<TrendListAdapter.ViewHolder> {
 
     private String imageBaseUrl = "https://image.tmdb.org/t/p/w342";
 
     private List<Movie> mMovies;
 
-    public MovieListAdapter(List<Movie> movies) {
+    public TrendListAdapter(List<Movie> movies) {
         mMovies = movies;
     }
 
 
-    private OnItemClickListener listener;
+    private OnMovieClickListener listener;
 
-    public void setOnClickListener(OnItemClickListener listener) {
+    public void setOnClickListener(OnMovieClickListener listener) {
         this.listener = listener;
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(Movie movie);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -55,7 +51,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
                     Log.e("click", "MovieAdapter");
                     int position = getAdapterPosition(); // gets item position
                     if (position != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
-                        listener.onItemClick(mMovies.get(position));
+                        listener.onMovieClick(mMovies.get(position));
                     }
                 }
 

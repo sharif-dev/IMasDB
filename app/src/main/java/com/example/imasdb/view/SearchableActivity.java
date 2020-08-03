@@ -46,9 +46,9 @@ public class SearchableActivity extends AppCompatActivity {
         Log.i(TAG, "onCreate: ");
         searchResultLv = findViewById(R.id.search_result_lv);
         adapter = new SearchResultAdapter(this, new ArrayList<Movie>());
-        adapter.setOnClickListener(new SearchResultAdapter.OnItemClickListener() {
+        adapter.setOnClickListener(new OnMovieClickListener() {
             @Override
-            public void onItemClick(Movie movie) {
+            public void onMovieClick(Movie movie) {
                 Log.i(TAG, "onItemClick: " + movie);
                 Intent intent = new Intent(SearchableActivity.this, MainActivity.class);
                 intent.putExtra("searchRes", movie);

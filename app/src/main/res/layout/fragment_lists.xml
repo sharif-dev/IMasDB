@@ -6,7 +6,7 @@
     android:layout_height="fill_parent"
     android:fillViewport="true"
     android:background="@color/backgroundDark"
-    tools:context=".view.ListsFragment">
+    tools:context=".view.TrendListsFragment">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

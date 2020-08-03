@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.imasdb.model.Movie;
 import com.example.imasdb.model.MovieList;
-import com.example.imasdb.model.MovieListType;
-import com.example.imasdb.view.MovieListAdapter;
+import com.example.imasdb.model.TrendListType;
+import com.example.imasdb.view.TrendListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +16,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.example.imasdb.model.MovieListType.LATEST;
-import static com.example.imasdb.model.MovieListType.MOST_POPULAR;
-import static com.example.imasdb.model.MovieListType.TOP_RATED;
+import static com.example.imasdb.model.TrendListType.LATEST;
+import static com.example.imasdb.model.TrendListType.MOST_POPULAR;
+import static com.example.imasdb.model.TrendListType.TOP_RATED;
 
 public class MovieListBuilder {
     private String apiKey;
@@ -41,10 +41,10 @@ public class MovieListBuilder {
 
     }
 
-    public void getMovieList(MovieListType movieListType, MovieListAdapter adapter) {
+    public void getMovieList(TrendListType trendListType, TrendListAdapter adapter) {
 
         MovieListsApiEndpointInterface movieListsApi = RetrofitBuilder.getMovieApi();
-        switch (movieListType) {
+        switch (trendListType) {
             case LATEST:
                 Call<MovieList> latestMovies = movieListsApi.getLatestMovies(apiKey);
                 setEnqueue(latestMovies, LATEST, adapter);
@@ -61,7 +61,7 @@ public class MovieListBuilder {
 
     }
 
-    private void setEnqueue(Call<MovieList> enqueueList, final MovieListType listType, final MovieListAdapter adapter) {
+    private void setEnqueue(Call<MovieList> enqueueList, final TrendListType listType, final TrendListAdapter adapter) {
         enqueueList.enqueue(new Callback<MovieList>() {
             @Override
             public void onResponse(Call<MovieList> call, Response<MovieList> response) {

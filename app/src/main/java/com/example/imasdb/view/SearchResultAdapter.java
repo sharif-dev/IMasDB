@@ -19,15 +19,12 @@ import java.util.ArrayList;
 public class SearchResultAdapter extends ArrayAdapter<Movie> {
     private String imageBaseUrl = "https://image.tmdb.org/t/p/w92";
 
-    private SearchResultAdapter.OnItemClickListener listener;
+    private OnMovieClickListener listener;
 
-    public void setOnClickListener(SearchResultAdapter.OnItemClickListener listener) {
+    public void setOnClickListener(OnMovieClickListener listener) {
         this.listener = listener;
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(Movie movie);
-    }
 
     private static class ViewHolder {
         public ImageView ivCover;
@@ -59,7 +56,7 @@ public class SearchResultAdapter extends ArrayAdapter<Movie> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(movie);
+                listener.onMovieClick(movie);
             }
         });
         Picasso.get().load(imageBaseUrl+movie.getPosterPath()).placeholder(R.drawable.loading_placeholder).error(R.drawable.ic_baseline_image_24).into(viewHolder.ivCover);

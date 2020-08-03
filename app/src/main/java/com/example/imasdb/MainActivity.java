@@ -1,5 +1,6 @@
 package com.example.imasdb;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,21 +15,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
 import com.example.imasdb.model.Movie;
-import com.example.imasdb.view.ListsFragment;
+import com.example.imasdb.view.CustomeListFragment;
+import com.example.imasdb.view.OnMovieClickListener;
+import com.example.imasdb.view.TrendListsFragment;
 import com.example.imasdb.view.LoginActivity;
 import com.example.imasdb.view.MovieFragment;
-import com.example.imasdb.view.MovieListAdapter;
+import com.example.imasdb.view.TrendListAdapter;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TooManyListenersException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,12 +48,20 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
-
+    private NavigationView navigationView;
+    private OnMovieClickListener onMovieClickListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         res = getResources();
         setContentView(R.layout.activity_main);
+        onMovieClickListener = new OnMovieClickListener() {
+            @Override
+            public void onMovieClick(Movie movie) {
+                Fragment fragment = MovieFragment.newInstance(movie);
+                transitFrag(fragment,true);
+            }
+        };
         setupDrawerMenu();
         context = this;
         handleIntent(getIntent());
@@ -62,35 +72,35 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerToggle = new ActionBarDrawerToggle(this,mDrawer,toolbar,R.string.drawer_open,  R.string.drawer_close);
+        drawerToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
         drawerToggle.setDrawerIndicatorEnabled(true);
         drawerToggle.syncState();
         mDrawer.addDrawerListener(drawerToggle);
+        navigationView = (NavigationView) findViewById(R.id.nvView);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                selectDrawerItem(item);
+                return true;
+            }
+        });
     }
 
-    private void handleIntent(Intent intent){
+    private void handleIntent(Intent intent) {
         //        if (!intent.hasExtra("loginCompleted")) {
 //            launchComposeView(LoginLaunchType.LOGIN);
 //        }
         Fragment fragment;
-        if(intent.hasExtra("searchRes")){
+        if (intent.hasExtra("searchRes")) {
             Movie movie = (Movie) getIntent().getExtras().getSerializable("searchRes");
             fragment = MovieFragment.newInstance(movie);
+        } else {
+            fragment = TrendListsFragment.newInstance(onMovieClickListener);
         }
-        else{
-            fragment = new ListsFragment();
-            ((ListsFragment) fragment).setOnClickListener(new MovieListAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(Movie movie) {
-                    Fragment fragment = MovieFragment.newInstance(movie);
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.fl_main_fragment, fragment).addToBackStack(null).commit();
-                }
-            });
-        }
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fl_main_fragment, fragment).commit();
+        transitFrag(fragment,false);
     }
+
+
 
     private void logout() {
         launchComposeView(LoginLaunchType.LOGOUT);
@@ -111,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -121,4 +132,29 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void transitFrag(Fragment fragment, Boolean addToStack) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        if (addToStack) {
+            ft.replace(R.id.fl_main_fragment, fragment).addToBackStack(null).commit();
+        } else {
+            ft.replace(R.id.fl_main_fragment, fragment).commit();
+        }
+    }
+
+    private void selectDrawerItem(MenuItem item) {
+        Fragment fragment = null;
+        switch(item.getItemId()) {
+            case R.id.nav_login:
+                fragment = CustomeListFragment.newInstance(onMovieClickListener);
+                break;
+            case R.id.nav_trends:
+                fragment = TrendListsFragment.newInstance(onMovieClickListener);
+                break;
+            default:
+                fragment = TrendListsFragment.newInstance(onMovieClickListener);
+        }
+        transitFrag(fragment,false);
+        setTitle(item.getTitle());
+        mDrawer.closeDrawers();
+    }
 }
