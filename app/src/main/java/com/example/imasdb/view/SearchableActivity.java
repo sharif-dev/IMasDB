@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 
 import com.example.imasdb.MainActivity;
 import com.example.imasdb.R;
@@ -31,11 +34,15 @@ public class SearchableActivity extends AppCompatActivity {
     private static final String TAG = "SEARCHABLE_ACTIVITY";
     private ListView searchResultLv;
     private SearchResultAdapter adapter;
+    private Toolbar toolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchable);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Log.i(TAG, "onCreate: ");
         searchResultLv = findViewById(R.id.search_result_lv);
         adapter = new SearchResultAdapter(this, new ArrayList<Movie>());
@@ -52,6 +59,7 @@ public class SearchableActivity extends AppCompatActivity {
         Intent intent = getIntent();
         handleIntent(intent);
     }
+
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);

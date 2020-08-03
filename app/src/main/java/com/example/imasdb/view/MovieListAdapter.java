@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,10 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.imasdb.R;
 import com.example.imasdb.model.Movie;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.security.PublicKey;
 import java.util.List;
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.ViewHolder> {
@@ -75,7 +72,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.movie_item, parent, false);
+        View contactView = inflater.inflate(R.layout.item_movie, parent, false);
         Log.e("salan", "salam");
         // Return a new holder instance
         return new ViewHolder(contactView);

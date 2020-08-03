@@ -1,6 +1,8 @@
 package com.example.imasdb;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -26,6 +28,7 @@ import com.example.imasdb.view.MovieListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TooManyListenersException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -41,17 +44,28 @@ public class MainActivity extends AppCompatActivity {
 
     private Activity context;
     private DrawerLayout mDrawer;
+    private ActionBarDrawerToggle drawerToggle;
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         res = getResources();
         setContentView(R.layout.activity_main);
+        setupDrawerMenu();
         context = this;
-        Log.i(TAG, "onCreate: ");
         handleIntent(getIntent());
+    }
+
+    private void setupDrawerMenu() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+        drawerToggle = new ActionBarDrawerToggle(this,mDrawer,toolbar,R.string.drawer_open,  R.string.drawer_close);
+        drawerToggle.setDrawerIndicatorEnabled(true);
+        drawerToggle.syncState();
+        mDrawer.addDrawerListener(drawerToggle);
     }
 
     private void handleIntent(Intent intent){
@@ -89,13 +103,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        getSupportFragmentManager().popBackStack();
-    }
-
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
@@ -106,13 +113,11 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // The action bar home/up action should open or close the drawer.
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawer.openDrawer(GravityCompat.START);
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

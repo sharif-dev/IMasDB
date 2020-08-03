@@ -2,13 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_main"
+            android:checked="true"
+            android:title="@string/trends"/>
+        <item
             android:id="@+id/nav_login"
-            android:title="Login"/>
-        <item
-            android:id="@+id/nav_favourite"
-            android:title="Favourit"/>
-        <item
-            android:id="@+id/nav_watchlist"
-            android:title="Third"/>
+            android:title="@string/login"/>
     </group>
+    <item android:title="Lists">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:title="@string/favourites" />
+                <item
+                    android:title="@string/watch_list" />
+            </group>
+        </menu>
+    </item>
 </menu>
+    <!--TODO: add icon-->
