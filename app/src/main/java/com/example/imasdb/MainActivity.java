@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -65,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
                 transitFrag(fragment,true);
             }
         };
+        if (!User.getUser().getLoggedIn()) {
+            launchComposeView(LoginLaunchType.LOGIN);
+        }
         setupDrawerMenu();
         context = this;
         handleIntent(getIntent());
@@ -90,9 +94,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
-        if (!User.getUser().getLoggedIn()) {
-            launchComposeView(LoginLaunchType.LOGIN);
-        }
         Fragment fragment;
         if (intent.hasExtra("searchRes")) {
             Movie movie = (Movie) getIntent().getExtras().getSerializable("searchRes");
@@ -110,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void launchComposeView(LoginLaunchType loginLaunchType) {
+        Log.i(TAG, "launchComposeView: lunchhhhhhhhhhhhh");
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         intent.putExtra("loginType", loginLaunchType.ordinal());
         startActivity(intent);
@@ -161,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
             default:
                 fragment = TrendListsFragment.newInstance(onMovieClickListener);
         }
-        transitFrag(fragment,false);
+        transitFrag(fragment,true);
         setTitle(item.getTitle());
         mDrawer.closeDrawers();
     }

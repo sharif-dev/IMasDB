@@ -52,6 +52,7 @@ public class CustomeListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new CustomeListAdapter(new ArrayList<Movie>());
+        adapter.setOnClickListener(onMovieClickListener);
         if (getArguments() != null) {
             customListType = (CustomListType) getArguments().getSerializable(ARG_PARAM1);
         }
@@ -89,6 +90,7 @@ public class CustomeListFragment extends Fragment {
             @Override
             public void onResponse(Call<MovieList> call, Response<MovieList> response) {
                 if(response.isSuccessful()){
+                    adapter.clear();
                     List<Movie> movies = response.body().results;
                     adapter.addAll(movies);
                 }
