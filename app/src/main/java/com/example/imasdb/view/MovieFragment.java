@@ -3,13 +3,13 @@ package com.example.imasdb.view;
 import android.content.res.Resources;
 import android.os.Bundle;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -17,11 +17,15 @@ import android.widget.Toast;
 
 import com.example.imasdb.R;
 import com.example.imasdb.model.Movie;
+import com.example.imasdb.model.RequestBodies.FavouriteMovie;
+import com.example.imasdb.model.RequestBodies.Rate;
+import com.example.imasdb.model.RequestBodies.WatchlistMovie;
 import com.example.imasdb.model.User;
 import com.example.imasdb.model.movie_detailes.cast.Cast;
 import com.example.imasdb.model.movie_detailes.cast.CastsList;
 import com.example.imasdb.model.movie_detailes.review.Review;
 import com.example.imasdb.model.movie_detailes.review.Reviews;
+import com.example.imasdb.network.AccountApiEndpointInterface;
 import com.example.imasdb.network.MovieDetailsApi;
 import com.example.imasdb.network.RetrofitBuilder;
 import com.squareup.picasso.Picasso;
@@ -88,8 +92,65 @@ public class MovieFragment extends Fragment {
         reviews = view.findViewById(R.id.reviewText);
         setMovieCastsAndReviews();
         Log.e("hello", "s");
+        ImageButton favImgBtn = view.findViewById(R.id.img_btn_fav);
+        ImageButton watchListImgBtn = view.findViewById(R.id.img_btn_watch_list);
+        setUpFavBtn(favImgBtn);
+        setupWatchListBtn(watchListImgBtn);
         return view;
+    }
+    //todo: clean this section
+    private void setupWatchListBtn(final ImageButton watchListImgBtn) {
+        watchListImgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AccountApiEndpointInterface api = RetrofitBuilder.getAccountApi();
+                Call<Object> addToFav = api.addToWatchList(User.getUser().getAccount().getId(), res.getString(R.string.api_key), User.getUser().getSessionToken().getSessionId(), new WatchlistMovie("movie", movie.getId(), true));
+                addToFav.enqueue(new Callback<Object>() {
+                    @Override
+                    public void onResponse(Call<Object> call, Response<Object> response) {
+                        if (!response.isSuccessful()) {
+                            Log.e("failed rating", response.message() + response.code() + response.body());
+                            Toast.makeText(getContext(), "failed! try again later", Toast.LENGTH_LONG).show();
+                        }
+                        watchListImgBtn.setImageDrawable(res.getDrawable(R.drawable.ic_baseline_favorite_24));
+                        Toast.makeText(getContext(), "added to watch list!", Toast.LENGTH_LONG).show();
+                    }
 
+                    @Override
+                    public void onFailure(Call<Object> call, Throwable t) {
+                        Log.e("failed rating", Objects.requireNonNull(t.getMessage()));
+                        Toast.makeText(getContext(), "failed! try again later", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void setUpFavBtn(final ImageButton favImgBtn) {
+        favImgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AccountApiEndpointInterface api = RetrofitBuilder.getAccountApi();
+                Call<Object> addToFav = api.addToFav(User.getUser().getAccount().getId(), res.getString(R.string.api_key), User.getUser().getSessionToken().getSessionId(), new FavouriteMovie("movie", movie.getId(), true));
+                addToFav.enqueue(new Callback<Object>() {
+                    @Override
+                    public void onResponse(Call<Object> call, Response<Object> response) {
+                        if (!response.isSuccessful()) {
+                            Log.e("failed rating", response.message() + response.code() + response.body());
+                            Toast.makeText(getContext(), "failed! try again later", Toast.LENGTH_LONG).show();
+                        }
+                        favImgBtn.setImageDrawable(res.getDrawable(R.drawable.ic_baseline_favorite_24));
+                        Toast.makeText(getContext(), "added to favourites!", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Object> call, Throwable t) {
+                        Log.e("failed rating", Objects.requireNonNull(t.getMessage()));
+                        Toast.makeText(getContext(), "failed! try again later", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
     }
 
     private void setupRatingBar(RatingBar ratingBar) {
@@ -97,20 +158,20 @@ public class MovieFragment extends Fragment {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
                 MovieDetailsApi api = RetrofitBuilder.getMovieDetailApi();
-                Call<Object> rate = api.rateMovie(movie.getId(), res.getString(R.string.api_key), User.getUser().getSessionToken().getSessionId(), (int) v * 2);
+                Call<Object> rate = api.rateMovie(movie.getId(), res.getString(R.string.api_key), User.getUser().getSessionToken().getSessionId(), new Rate((int) v * 2));
                 rate.enqueue(new Callback<Object>() {
                     @Override
                     public void onResponse(Call<Object> call, Response<Object> response) {
-                        if (response.code() != 200) {
+                        if (!response.isSuccessful()) {
                             Log.e("failed rating", response.message() + response.code() + response.body());
                             Toast.makeText(getContext(), "rating failed! try again later", Toast.LENGTH_LONG).show();
                         }
+                        Toast.makeText(getContext(), "rated", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onFailure(Call<Object> call, Throwable t) {
                         Log.e("failed rating", Objects.requireNonNull(t.getMessage()));
-
                         Toast.makeText(getContext(), "rating failed! try again later", Toast.LENGTH_LONG).show();
                     }
                 });
