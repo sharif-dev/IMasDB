@@ -31,5 +31,6 @@
     <string name="trends">Trends</string>
     <string name="favourites">Favourites</string>
     <string name="watch_list">Watch List</string>
+    <string name="create_list">create list</string>
 
 </resources>

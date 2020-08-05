@@ -4,10 +4,10 @@
         <item
             android:id="@+id/nav_trends"
             android:checked="true"
-            android:title="@string/trends"/>
+            android:title="@string/trends" />
         <item
             android:id="@+id/nav_login"
-            android:title="@string/login"/>
+            android:title="@string/login" />
     </group>
     <item android:title="Lists">
         <menu>
@@ -18,8 +18,10 @@
                 <item
                     android:id="@+id/nav_watchlist"
                     android:title="@string/watch_list" />
+                <item
+                    android:id="@+id/nav_create_list"
+                    android:title="@string/create_list" />
             </group>
         </menu>
     </item>
-</menu>
-    <!--TODO: add icon-->
+</menu><!--TODO: add icon-->

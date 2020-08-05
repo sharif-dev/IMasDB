@@ -24,6 +24,7 @@ import android.widget.SearchView;
 import com.example.imasdb.model.CustomListType;
 import com.example.imasdb.model.Movie;
 import com.example.imasdb.model.User;
+import com.example.imasdb.view.CreateListFragment;
 import com.example.imasdb.view.CustomeListFragment;
 import com.example.imasdb.view.OnMovieClickListener;
 import com.example.imasdb.view.TrendListsFragment;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView navigationView;
     private OnMovieClickListener onMovieClickListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMovieClick(Movie movie) {
                 Fragment fragment = MovieFragment.newInstance(movie);
-                transitFrag(fragment,true);
+                transitFrag(fragment, true);
             }
         };
         setupDrawerMenu();
@@ -100,9 +102,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             fragment = TrendListsFragment.newInstance(onMovieClickListener);
         }
-        transitFrag(fragment,false);
+        transitFrag(fragment, false);
     }
-
 
 
     private void logout() {
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void selectDrawerItem(MenuItem item) {
         Fragment fragment = null;
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.nav_login:
                 launchComposeView(LoginLaunchType.LOGIN);
                 return;
@@ -153,18 +154,22 @@ public class MainActivity extends AppCompatActivity {
                 fragment = TrendListsFragment.newInstance(onMovieClickListener);
                 break;
             case R.id.nav_favourite:
-                fragment = CustomeListFragment.newInstance(onMovieClickListener,CustomListType.FAVOURITE);
+                fragment = CustomeListFragment.newInstance(onMovieClickListener, CustomListType.FAVOURITE);
                 break;
             case R.id.nav_watchlist:
                 fragment = CustomeListFragment.newInstance(onMovieClickListener, CustomListType.WATCH_LIST);
                 break;
+            case R.id.nav_create_list:
+                fragment = CreateListFragment.newInstance("", "");
+                break;
             default:
                 fragment = TrendListsFragment.newInstance(onMovieClickListener);
         }
-        transitFrag(fragment,false);
+        transitFrag(fragment, false);
         setTitle(item.getTitle());
         mDrawer.closeDrawers();
     }
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);

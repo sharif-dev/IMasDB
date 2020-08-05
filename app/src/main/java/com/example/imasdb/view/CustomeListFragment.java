@@ -30,11 +30,12 @@ public class CustomeListFragment extends Fragment {
     private OnMovieClickListener onMovieClickListener;
 
     private static final String ARG_PARAM1 = "type";
-//    private static final String ARG_PARAM2 = "param2";
+    //    private static final String ARG_PARAM2 = "param2";
 //
     private CustomListType customListType;
-//    private String mParam2;
+    //    private String mParam2;
     private CustomeListAdapter adapter;
+
     public CustomeListFragment() {
         // Required empty public constructor
     }
@@ -63,7 +64,7 @@ public class CustomeListFragment extends Fragment {
 
         View fragment = inflater.inflate(R.layout.fragment_custome_list, container, false);
         RecyclerView recyclerView = fragment.findViewById(R.id.my_recycler_view);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapter);
@@ -75,20 +76,20 @@ public class CustomeListFragment extends Fragment {
         AccountApiEndpointInterface accountApiEndpointInterface = RetrofitBuilder.getAccountApi();
         String apiKey = getResources().getString(R.string.api_key);
         Call<MovieList> getMovies;
-        switch (customListType){
+        switch (customListType) {
             case FAVOURITE:
-                getMovies = accountApiEndpointInterface.getFavouriteMovies(User.getUser().getAccount().getId(),apiKey ,User.getUser().getSessionToken().getSessionId());
+                getMovies = accountApiEndpointInterface.getFavouriteMovies(User.getUser().getAccount().getId(), apiKey, User.getUser().getSessionToken().getSessionId());
                 break;
             case WATCH_LIST:
-                getMovies = accountApiEndpointInterface.getWatchListMovies(User.getUser().getAccount().getId(),apiKey ,User.getUser().getSessionToken().getSessionId());
+                getMovies = accountApiEndpointInterface.getWatchListMovies(User.getUser().getAccount().getId(), apiKey, User.getUser().getSessionToken().getSessionId());
                 break;
             default:
-                getMovies = accountApiEndpointInterface.getFavouriteMovies(User.getUser().getAccount().getId(),apiKey ,User.getUser().getSessionToken().getSessionId());
+                getMovies = accountApiEndpointInterface.getFavouriteMovies(User.getUser().getAccount().getId(), apiKey, User.getUser().getSessionToken().getSessionId());
         }
         getMovies.enqueue(new Callback<MovieList>() {
             @Override
             public void onResponse(Call<MovieList> call, Response<MovieList> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     List<Movie> movies = response.body().results;
                     adapter.addAll(movies);
                 }
