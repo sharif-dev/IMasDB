@@ -11,9 +11,14 @@ public class User {
     public static enum LoginSuccess {
         FAILED, IN_PROGRESS, SUCCEED
     }
-
+    private Boolean loggedIn = false;
     private LoginSuccess loginSuccess;
-
+    public void setLoggedIn(Boolean loggedIn){
+        this.loggedIn = loggedIn;
+    }
+    public Boolean getLoggedIn(){
+        return loggedIn;
+    }
     public LoginSuccess isLoginSucceed() {
         return loginSuccess;
     }

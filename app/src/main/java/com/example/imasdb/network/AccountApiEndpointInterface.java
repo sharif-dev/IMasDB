@@ -11,11 +11,11 @@ import retrofit2.http.Query;
 public interface AccountApiEndpointInterface {
 
     @GET("account/{account_id}/favorite/movies")
-    Call<MovieList> getFavouriteMovies(@Query("api_key") String apikey, @Path("account_id") int accountId,@Query("session_id") String sessionId);
+    Call<MovieList> getFavouriteMovies( @Path("account_id") int accountId,@Query("api_key") String apikey,@Query("session_id") String sessionId);
     @GET("account")
     Call<Account> getAccountDetail(@Query("api_key") String apikey,@Query("session_id") String sessionId);
 
     @GET("account/{account_id}/watchlist/movies")
-    Call<MovieList> getWatchListMovies(@Query("api_key") String apikey, @Path("account_id") int accountId,@Query("session_id") String sessionId);
+    Call<MovieList> getWatchListMovies(@Path("account_id") int accountId,@Query("api_key") String apikey ,@Query("session_id") String sessionId);
 
 }

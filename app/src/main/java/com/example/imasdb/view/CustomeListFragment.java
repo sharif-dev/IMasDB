@@ -77,13 +77,13 @@ public class CustomeListFragment extends Fragment {
         Call<MovieList> getMovies;
         switch (customListType){
             case FAVOURITE:
-                getMovies = accountApiEndpointInterface.getFavouriteMovies(apiKey, User.getUser().getAccount().getId(),User.getUser().getSessionToken().getSessionId());
+                getMovies = accountApiEndpointInterface.getFavouriteMovies(User.getUser().getAccount().getId(),apiKey ,User.getUser().getSessionToken().getSessionId());
                 break;
             case WATCH_LIST:
-                getMovies = accountApiEndpointInterface.getWatchListMovies(apiKey, User.getUser().getAccount().getId(),User.getUser().getSessionToken().getSessionId());
+                getMovies = accountApiEndpointInterface.getWatchListMovies(User.getUser().getAccount().getId(),apiKey ,User.getUser().getSessionToken().getSessionId());
                 break;
             default:
-                getMovies = accountApiEndpointInterface.getFavouriteMovies(apiKey, User.getUser().getAccount().getId(),User.getUser().getSessionToken().getSessionId());
+                getMovies = accountApiEndpointInterface.getFavouriteMovies(User.getUser().getAccount().getId(),apiKey ,User.getUser().getSessionToken().getSessionId());
         }
         getMovies.enqueue(new Callback<MovieList>() {
             @Override

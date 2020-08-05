@@ -23,6 +23,7 @@ import android.widget.SearchView;
 
 import com.example.imasdb.model.CustomListType;
 import com.example.imasdb.model.Movie;
+import com.example.imasdb.model.User;
 import com.example.imasdb.view.CustomeListFragment;
 import com.example.imasdb.view.OnMovieClickListener;
 import com.example.imasdb.view.TrendListsFragment;
@@ -89,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
-//        if (!intent.hasExtra("loginCompleted")) {
-//            launchComposeView(LoginLaunchType.LOGIN);
-//        }
+        if (!User.getUser().getLoggedIn()) {
+            launchComposeView(LoginLaunchType.LOGIN);
+        }
         Fragment fragment;
         if (intent.hasExtra("searchRes")) {
             Movie movie = (Movie) getIntent().getExtras().getSerializable("searchRes");

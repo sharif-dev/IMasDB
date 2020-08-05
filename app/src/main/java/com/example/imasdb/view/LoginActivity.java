@@ -196,6 +196,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void finishLogin() {
+        User.getUser().setLoggedIn(true);
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("loginCompleted", MainActivity.LoginLaunchType.LOGIN);
         startActivity(intent);
@@ -211,6 +212,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<Object> call, Response<Object> response) {
 
                 if (response.code() == 200) {
+                    User.getUser().setLoggedIn(false);
                     Toast.makeText(getApplicationContext(), "you logged out successfully", Toast.LENGTH_LONG).show();
 
                 } else {
