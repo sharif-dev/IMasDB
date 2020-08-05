@@ -85,6 +85,9 @@ public class CustomeListAdapter extends RecyclerView.Adapter<CustomeListAdapter.
         mMovies.addAll(results);
         this.notifyDataSetChanged();
     }
-
+    public void clear(){
+        mMovies.clear();
+        this.notifyDataSetChanged();
+    }
 
 }

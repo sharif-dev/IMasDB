@@ -3,6 +3,8 @@ package com.example.imasdb.view;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
@@ -15,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.imasdb.R;
+import com.example.imasdb.model.RequestBodies.CreateListBody;
 import com.example.imasdb.model.User;
 import com.example.imasdb.model.list_models.List;
 import com.example.imasdb.model.list_models.ListResult;
@@ -45,31 +48,18 @@ public class CreateListFragment extends Fragment {
     private String mParam2;
     private CreateListAdapter createListAdapter;
     RecyclerView recyclerView;
-    private OnListItemClickedListener onListItemClickedListener = new OnListItemClickedListener() {
-        @Override
-        public void onListClick(ListResult listResult) {
 
-        }
-    };
+    private OnListItemClickedListener onListItemClickedListener;
 
     public CreateListFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CreateListFragment.
-     */
     // TODO: Rename and change types and number of parameters
-    public static CreateListFragment newInstance(String param1, String param2) {
+    public static CreateListFragment newInstance(OnListItemClickedListener onListItemClickedListener) {
         CreateListFragment fragment = new CreateListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        fragment.onListItemClickedListener = onListItemClickedListener;
         fragment.setArguments(args);
         return fragment;
     }
@@ -101,15 +91,18 @@ public class CreateListFragment extends Fragment {
                 createNewList(editText.getText().toString());
             }
         });
-
-        recyclerView.setAdapter(new CreateListAdapter(new ArrayList<ListResult>()));
+        CreateListAdapter createListAdapter = new CreateListAdapter(new ArrayList<ListResult>());
+        createListAdapter.setOnListItemClickedListener(onListItemClickedListener);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(createListAdapter);
         return view;
     }
 
     private void createNewList(String name) {
-        HashMap<String, String> hashMap = new HashMap<String, String>();
-        hashMap.put("name", name);
-        Call<Object> create = RetrofitBuilder.getCreateListApi().createList(getResources().getString(R.string.api_key), User.getUser().getSessionToken().getSessionId(),hashMap);
+        Log.e("ses", User.getInstance().getSessionToken().getSessionId());
+        Call<Object> create = RetrofitBuilder.getCreateListApi().createList(getResources().getString(R.string.api_key), User.getUser().getSessionToken().getSessionId(), new CreateListBody(name, "", "en"));
         create.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
@@ -135,7 +128,10 @@ public class CreateListFragment extends Fragment {
         myList.enqueue(new Callback<List>() {
             @Override
             public void onResponse(Call<List> call, Response<List> response) {
+                Log.e("list error", response.code() + "");
+
                 if (response.isSuccessful()) {
+                    Log.e("list comp", response.code() + "");
                     ((CreateListAdapter) recyclerView.getAdapter()).addAll(response.body());
                 } else {
                     Log.e("list error", response.code() + "");

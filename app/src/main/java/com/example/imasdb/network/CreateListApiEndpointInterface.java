@@ -1,5 +1,6 @@
 package com.example.imasdb.network;
 
+import com.example.imasdb.model.RequestBodies.CreateListBody;
 import com.example.imasdb.model.list_models.List;
 
 import java.util.HashMap;
@@ -20,6 +21,6 @@ public interface CreateListApiEndpointInterface {
 
     @POST("list")
     @Headers("Content-Type: application/json;charset=utf-8")
-    Call<Object> createList(@Query("api_key") String apiKey, @Query("session_id") String sessionId, @Body HashMap<String, String> name);
+    Call<Object> createList(@Query("api_key") String apiKey, @Query("session_id") String sessionId, @Body CreateListBody name);
 
 }

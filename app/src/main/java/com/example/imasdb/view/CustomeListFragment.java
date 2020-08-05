@@ -15,6 +15,7 @@ import com.example.imasdb.model.CustomListType;
 import com.example.imasdb.model.Movie;
 import com.example.imasdb.model.MovieList;
 import com.example.imasdb.model.User;
+import com.example.imasdb.model.list_models.ListResult;
 import com.example.imasdb.network.AccountApiEndpointInterface;
 import com.example.imasdb.network.RetrofitBuilder;
 
@@ -35,6 +36,7 @@ public class CustomeListFragment extends Fragment {
     private CustomListType customListType;
     //    private String mParam2;
     private CustomeListAdapter adapter;
+    private ListResult listResult;
 
     public CustomeListFragment() {
         // Required empty public constructor
@@ -49,10 +51,22 @@ public class CustomeListFragment extends Fragment {
         return fragment;
     }
 
+    public static CustomeListFragment newInstance(OnMovieClickListener listener, CustomListType customListType, ListResult listResult) {
+        CustomeListFragment fragment = new CustomeListFragment();
+        Bundle args = new Bundle();
+        fragment.onMovieClickListener = listener;
+        fragment.listResult = listResult;
+        args.putSerializable(ARG_PARAM1, customListType);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new CustomeListAdapter(new ArrayList<Movie>());
+        adapter.setOnClickListener(onMovieClickListener);
         if (getArguments() != null) {
             customListType = (CustomListType) getArguments().getSerializable(ARG_PARAM1);
         }
@@ -83,6 +97,9 @@ public class CustomeListFragment extends Fragment {
             case WATCH_LIST:
                 getMovies = accountApiEndpointInterface.getWatchListMovies(User.getUser().getAccount().getId(), apiKey, User.getUser().getSessionToken().getSessionId());
                 break;
+            case CUSTOM:
+                getMovies = accountApiEndpointInterface.getCustomList(listResult.getId(), apiKey, "en");
+                break;
             default:
                 getMovies = accountApiEndpointInterface.getFavouriteMovies(User.getUser().getAccount().getId(), apiKey, User.getUser().getSessionToken().getSessionId());
         }
@@ -90,7 +107,8 @@ public class CustomeListFragment extends Fragment {
             @Override
             public void onResponse(Call<MovieList> call, Response<MovieList> response) {
                 if (response.isSuccessful()) {
-                    List<Movie> movies = response.body().results;
+                    adapter.clear();
+                    List<Movie> movies = response.body().getResults();
                     adapter.addAll(movies);
                 }
             }

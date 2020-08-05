@@ -50,6 +50,7 @@ public class CreateListAdapter extends RecyclerView.Adapter<CreateListAdapter.Vi
         nameView.setText(listResult.getName());
         TextView descView = holder.listDesc;
         descView.setText(listResult.getDescription());
+        Log.e("helloooo", "   dssd");
     }
 
 
@@ -57,11 +58,10 @@ public class CreateListAdapter extends RecyclerView.Adapter<CreateListAdapter.Vi
         public TextView listName;
         public TextView listDesc;
 
-        @SuppressLint("CutPasteId")
         public ViewHolder(View itemView) {
             super(itemView);
-            listName = (TextView) itemView.findViewById(R.id.listName);
-            listDesc = (TextView) itemView.findViewById(R.id.listName);
+            listName = (TextView) itemView.findViewById(R.id.listNameSet);
+            listDesc = (TextView) itemView.findViewById(R.id.listDesc);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -86,6 +86,7 @@ public class CreateListAdapter extends RecyclerView.Adapter<CreateListAdapter.Vi
     public void addAll(com.example.imasdb.model.list_models.List results) {
         lists.clear();
         lists.addAll(results.getListResults());
+        Log.e("size", results.getListResults().size() + "");
         this.notifyDataSetChanged();
     }
 

@@ -8,6 +8,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.ListFragment;
 
 import android.app.Activity;
 import android.app.SearchManager;
@@ -16,6 +17,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,8 +26,10 @@ import android.widget.SearchView;
 import com.example.imasdb.model.CustomListType;
 import com.example.imasdb.model.Movie;
 import com.example.imasdb.model.User;
+import com.example.imasdb.model.list_models.ListResult;
 import com.example.imasdb.view.CreateListFragment;
 import com.example.imasdb.view.CustomeListFragment;
+import com.example.imasdb.view.OnListItemClickedListener;
 import com.example.imasdb.view.OnMovieClickListener;
 import com.example.imasdb.view.TrendListsFragment;
 import com.example.imasdb.view.LoginActivity;
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView navigationView;
     private OnMovieClickListener onMovieClickListener;
+    private OnListItemClickedListener onListItemClickedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +72,17 @@ public class MainActivity extends AppCompatActivity {
                 transitFrag(fragment, true);
             }
         };
+
+        onListItemClickedListener = new OnListItemClickedListener() {
+            @Override
+            public void onListClick(ListResult listResult) {
+                Fragment fragment = CustomeListFragment.newInstance(onMovieClickListener, CustomListType.CUSTOM, listResult);
+                transitFrag(fragment, true);
+            }
+        };
+        if (!User.getUser().getLoggedIn()) {
+            launchComposeView(LoginLaunchType.LOGIN);
+        }
         setupDrawerMenu();
         context = this;
         handleIntent(getIntent());
@@ -92,9 +108,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
-        if (!User.getUser().getLoggedIn()) {
-            launchComposeView(LoginLaunchType.LOGIN);
-        }
         Fragment fragment;
         if (intent.hasExtra("searchRes")) {
             Movie movie = (Movie) getIntent().getExtras().getSerializable("searchRes");
@@ -111,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void launchComposeView(LoginLaunchType loginLaunchType) {
+        Log.i(TAG, "launchComposeView: lunchhhhhhhhhhhhh");
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         intent.putExtra("loginType", loginLaunchType.ordinal());
         startActivity(intent);
@@ -160,12 +174,13 @@ public class MainActivity extends AppCompatActivity {
                 fragment = CustomeListFragment.newInstance(onMovieClickListener, CustomListType.WATCH_LIST);
                 break;
             case R.id.nav_create_list:
-                fragment = CreateListFragment.newInstance("", "");
+                fragment = CreateListFragment.newInstance(onListItemClickedListener);
+
                 break;
             default:
                 fragment = TrendListsFragment.newInstance(onMovieClickListener);
         }
-        transitFrag(fragment, false);
+        transitFrag(fragment, true);
         setTitle(item.getTitle());
         mDrawer.closeDrawers();
     }
