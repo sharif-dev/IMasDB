@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
-        //        if (!intent.hasExtra("loginCompleted")) {
+//        if (!intent.hasExtra("loginCompleted")) {
 //            launchComposeView(LoginLaunchType.LOGIN);
 //        }
         Fragment fragment;
@@ -124,12 +125,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawer.openDrawer(GravityCompat.START);
-                return true;
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
         }
         return super.onOptionsItemSelected(item);
+
     }
 
     private void transitFrag(Fragment fragment, Boolean addToStack) {
@@ -145,10 +145,16 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = null;
         switch(item.getItemId()) {
             case R.id.nav_login:
-                fragment = CustomeListFragment.newInstance(onMovieClickListener);
-                break;
+                launchComposeView(LoginLaunchType.LOGIN);
+                return;
             case R.id.nav_trends:
                 fragment = TrendListsFragment.newInstance(onMovieClickListener);
+                break;
+            case R.id.nav_favourite:
+                fragment = CustomeListFragment.newInstance(onMovieClickListener);
+                break;
+            case R.id.nav_watchlist:
+                fragment = CustomeListFragment.newInstance(onMovieClickListener);
                 break;
             default:
                 fragment = TrendListsFragment.newInstance(onMovieClickListener);
@@ -156,5 +162,16 @@ public class MainActivity extends AppCompatActivity {
         transitFrag(fragment,false);
         setTitle(item.getTitle());
         mDrawer.closeDrawers();
+    }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 }

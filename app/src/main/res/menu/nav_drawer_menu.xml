@@ -13,8 +13,10 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
+                    android:id="@+id/nav_favourite"
                     android:title="@string/favourites" />
                 <item
+                    android:id="@+id/nav_watchlist"
                     android:title="@string/watch_list" />
             </group>
         </menu>

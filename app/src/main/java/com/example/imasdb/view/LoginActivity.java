@@ -1,6 +1,7 @@
 package com.example.imasdb.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -41,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
         if (loginType == MainActivity.LoginLaunchType.LOGOUT.ordinal()) {
             logout();
         }
-
         Button loginButton = findViewById(R.id.login_button);
         signUpBtn = findViewById(R.id.signup_btn);
         final EditText username = findViewById(R.id.login_username);
@@ -60,7 +60,9 @@ public class LoginActivity extends AppCompatActivity {
                 loadSignUpPage();
             }
         });
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void loadSignUpPage() {
@@ -162,8 +164,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Session> call, Throwable t) {
-                Log.i("sssssss", t.getMessage());
-
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
 
