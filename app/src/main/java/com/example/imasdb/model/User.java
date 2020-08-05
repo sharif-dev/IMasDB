@@ -7,7 +7,7 @@ public class User {
     private static User user = new User();
     private String username;
     private String password;
-
+    private Account account;
     public static enum LoginSuccess {
         FAILED, IN_PROGRESS, SUCCEED
     }
@@ -37,7 +37,12 @@ public class User {
 
     private User() {
     }
-
+    public void setAccount(Account account){
+        this.account = account;
+    }
+    public Account getAccount(){
+        return this.account;
+    }
     public Token getRequestToken() {
         return RequestToken;
     }

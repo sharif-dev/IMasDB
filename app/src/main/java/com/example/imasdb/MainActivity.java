@@ -21,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
+import com.example.imasdb.model.CustomListType;
 import com.example.imasdb.model.Movie;
 import com.example.imasdb.view.CustomeListFragment;
 import com.example.imasdb.view.OnMovieClickListener;
@@ -151,10 +152,10 @@ public class MainActivity extends AppCompatActivity {
                 fragment = TrendListsFragment.newInstance(onMovieClickListener);
                 break;
             case R.id.nav_favourite:
-                fragment = CustomeListFragment.newInstance(onMovieClickListener);
+                fragment = CustomeListFragment.newInstance(onMovieClickListener,CustomListType.FAVOURITE);
                 break;
             case R.id.nav_watchlist:
-                fragment = CustomeListFragment.newInstance(onMovieClickListener);
+                fragment = CustomeListFragment.newInstance(onMovieClickListener, CustomListType.WATCH_LIST);
                 break;
             default:
                 fragment = TrendListsFragment.newInstance(onMovieClickListener);

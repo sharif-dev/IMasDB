@@ -15,10 +15,13 @@ import android.widget.Toast;
 
 import com.example.imasdb.MainActivity;
 import com.example.imasdb.R;
+import com.example.imasdb.model.Account;
 import com.example.imasdb.model.Session;
 import com.example.imasdb.model.Token;
 import com.example.imasdb.model.User;
+import com.example.imasdb.network.AccountApiEndpointInterface;
 import com.example.imasdb.network.AuthApiEndpointInterface;
+import com.example.imasdb.network.RetrofitBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import retrofit2.Call;
@@ -137,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void getSessionId(AuthApiEndpointInterface myAuthApi, String apiKey) {
+    private void getSessionId(AuthApiEndpointInterface myAuthApi, final String apiKey) {
         String requestToken = User.getInstance().getRequestToken().requestToken;
         Log.i("salam", requestToken);
 
@@ -151,7 +154,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     User.getInstance().setSessionToken(response.body());
                     User.getInstance().setLoginSuccess(User.LoginSuccess.SUCCEED);
-                    finishLogin();
+                    getAccountDetails(apiKey);
+
                     Log.i("succeed", response.body().getSessionId());
                 } else {
                     Log.i("hello", response.message());
@@ -166,7 +170,28 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(Call<Session> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
+        });
+    }
 
+    private void getAccountDetails(String apiKey) {
+        AccountApiEndpointInterface accountApiEndpointInterface = RetrofitBuilder.getAccountApi();
+        Call<Account> getAccount = accountApiEndpointInterface.getAccountDetail(apiKey,User.getUser().getSessionToken().getSessionId());
+        getAccount.enqueue(new Callback<Account>() {
+            @Override
+            public void onResponse(Call<Account> call, Response<Account> response) {
+                if(response.isSuccessful()){
+                    User.getUser().setAccount(response.body());
+                    finishLogin();
+                }
+                else {
+                    Log.i("getAccountDetail", "onResponse: "+response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Account> call, Throwable t) {
+
+            }
         });
     }
 

@@ -23,13 +23,15 @@ public class RetrofitBuilder {
     public static AuthApiEndpointInterface getAuthApi() {
         return retrofit.create(AuthApiEndpointInterface.class);
     }
-
     public static MovieListsApiEndpointInterface getMovieApi() {
         return retrofit.create(MovieListsApiEndpointInterface.class);
     }
 
     public static MovieDetailsApi getMovieDetailApi() {
         return retrofit.create(MovieDetailsApi.class);
+    }
+    public static AccountApiEndpointInterface getAccountApi(){
+        return retrofit.create(AccountApiEndpointInterface.class);
     }
 }
 

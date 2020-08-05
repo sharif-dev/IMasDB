@@ -25,4 +25,5 @@ public interface MovieDetailsApi {
     @FormUrlEncoded
     @POST("movie/{movie_id}/rating")
     Call<Object> rateMovie(@Path("movie_id") int movieId, @Query("api_key") String apiKey, @Query("session_id") String sessionId, @Field("value") int rate);
+
 }
