@@ -65,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         res = getResources();
         setContentView(R.layout.activity_main);
+        onListItemClickedListener = new OnListItemClickedListener() {
+            @Override
+            public void onListClick(ListResult listResult) {
+                Fragment fragment = CustomeListFragment.newInstance(onMovieClickListener, CustomListType.CUSTOM, listResult);
+                transitFrag(fragment, true);
+            }
+        };
         onMovieClickListener = new OnMovieClickListener() {
             @Override
             public void onMovieClick(Movie movie) {
@@ -73,19 +80,20 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        onListItemClickedListener = new OnListItemClickedListener() {
-            @Override
-            public void onListClick(ListResult listResult) {
-                Fragment fragment = CustomeListFragment.newInstance(onMovieClickListener, CustomListType.CUSTOM, listResult);
-                transitFrag(fragment, true);
-            }
-        };
         if (!User.getUser().getLoggedIn()) {
             launchComposeView(LoginLaunchType.LOGIN);
         }
         setupDrawerMenu();
         context = this;
         handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onResume() {
+        if (!User.getUser().getLoggedIn()) {
+            launchComposeView(LoginLaunchType.LOGIN);
+        }
+        super.onResume();
     }
 
     private void setupDrawerMenu() {
@@ -175,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.nav_create_list:
                 fragment = CreateListFragment.newInstance(onListItemClickedListener);
-
                 break;
             default:
                 fragment = TrendListsFragment.newInstance(onMovieClickListener);

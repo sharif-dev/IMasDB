@@ -46,13 +46,11 @@ public class CreateListFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
-    private CreateListAdapter createListAdapter;
     RecyclerView recyclerView;
 
     private OnListItemClickedListener onListItemClickedListener;
 
     public CreateListFragment() {
-        // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
@@ -82,7 +80,6 @@ public class CreateListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create_list, container, false);
         recyclerView = view.findViewById(R.id.createListRecycler);
         Button button = view.findViewById(R.id.createListButton);
-        createListAdapter = new CreateListAdapter(new ArrayList<ListResult>());
         getLists();
         final EditText editText = view.findViewById(R.id.listName);
         button.setOnClickListener(new View.OnClickListener() {

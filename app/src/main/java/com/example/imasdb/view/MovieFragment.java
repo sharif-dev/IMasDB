@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,7 +43,6 @@ public class MovieFragment extends Fragment {
     private Movie movie;
     public Resources res;
     private String imageBaseUrl = "https://image.tmdb.org/t/p/w342";
-
     public MovieFragment() {
 
     }
@@ -94,10 +94,26 @@ public class MovieFragment extends Fragment {
         Log.e("hello", "s");
         ImageButton favImgBtn = view.findViewById(R.id.img_btn_fav);
         ImageButton watchListImgBtn = view.findViewById(R.id.img_btn_watch_list);
+        ImageButton customeListImgBtn = view.findViewById(R.id.img_btn_custom_list);
         setUpFavBtn(favImgBtn);
         setupWatchListBtn(watchListImgBtn);
+        setUpCustomeListBtn(customeListImgBtn);
         return view;
     }
+
+    private void setUpCustomeListBtn(ImageButton customeListImgBtn) {
+        customeListImgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddToListDialog();
+            }
+        });
+    }
+    private void showAddToListDialog() {
+        AddToListDialogFragment addToListDialogFragment = AddToListDialogFragment.newInstance("Some Title");
+        addToListDialogFragment.show(getChildFragmentManager(), "fragment_edit_name");
+    }
+
     //todo: clean this section
     private void setupWatchListBtn(final ImageButton watchListImgBtn) {
         watchListImgBtn.setOnClickListener(new View.OnClickListener() {

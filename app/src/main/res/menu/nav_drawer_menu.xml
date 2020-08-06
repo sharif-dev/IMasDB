@@ -14,12 +14,15 @@
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_favourite"
+                    android:icon="@drawable/ic_baseline_favorite_24"
                     android:title="@string/favourites" />
                 <item
                     android:id="@+id/nav_watchlist"
+                    android:icon="@drawable/ic_baseline_bookmark_24"
                     android:title="@string/watch_list" />
                 <item
                     android:id="@+id/nav_create_list"
+                    android:icon="@drawable/ic_baseline_list_24_black"
                     android:title="@string/create_list" />
             </group>
         </menu>

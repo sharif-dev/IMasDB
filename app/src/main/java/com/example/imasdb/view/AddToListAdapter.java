@@ -19,13 +19,15 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class CreateListAdapter extends RecyclerView.Adapter<CreateListAdapter.ViewHolder> {
+public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.ViewHolder> {
     private List<ListResult> lists;
     private OnListItemClickedListener onListItemClickedListener;
 
 
-    public CreateListAdapter(List<ListResult> lists) {
+    public AddToListAdapter(List<ListResult> lists) {
+
         this.lists = lists;
+
     }
 
     public void setOnListItemClickedListener(OnListItemClickedListener onListItemClickedListener) {
@@ -38,7 +40,7 @@ public class CreateListAdapter extends RecyclerView.Adapter<CreateListAdapter.Vi
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View contactView = inflater.inflate(R.layout.list_presenter, parent, false);
-        return new CreateListAdapter.ViewHolder(contactView);
+        return new AddToListAdapter.ViewHolder(contactView);
     }
 
     @Override
