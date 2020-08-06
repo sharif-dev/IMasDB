@@ -126,16 +126,16 @@ public class MovieFragment extends Fragment {
                     public void onResponse(Call<Object> call, Response<Object> response) {
                         if (!response.isSuccessful()) {
                             Log.e("failed rating", response.message() + response.code() + response.body());
-                            Toast.makeText(getContext(), "failed! try again later", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "failed! try again later", Toast.LENGTH_SHORT).show();
                         }
                         watchListImgBtn.setImageDrawable(res.getDrawable(R.drawable.ic_baseline_bookmark_24));
-                        Toast.makeText(getContext(), "added to watch list!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "added to watch list!", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onFailure(Call<Object> call, Throwable t) {
                         Log.e("failed rating", Objects.requireNonNull(t.getMessage()));
-                        Toast.makeText(getContext(), "failed! try again later", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "failed! try again later", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

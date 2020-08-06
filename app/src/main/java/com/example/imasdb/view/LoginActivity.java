@@ -93,9 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                     User.getInstance().setRequestToken(response.body());
                     validateRequestToken(myAuthApi, apiKey);
                 } else {
-                    switch (response.code()) {
-                        // TODO: implement error codes handling
-                    }
+                    Toast.makeText(getApplicationContext(),"failed to connect!"+response.code(),Toast.LENGTH_SHORT);
                 }
             }
 
@@ -121,19 +119,13 @@ public class LoginActivity extends AppCompatActivity {
                     User.getInstance().setRequestToken(response.body());
                     getSessionId(myAuthApi, apiKey);
                 } else {
-                    Log.i("salam", "validateRequestToken");
-
-                    switch (response.code()) {
-
-                        // TODO: implement error codes handling
-                    }
+                    Toast.makeText(getApplicationContext(),"failed to connect!"+response.code(),Toast.LENGTH_SHORT);
                 }
             }
 
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
                 Log.i("salam", "validateRequestTok " + t.getMessage());
-
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
 
@@ -155,14 +147,8 @@ public class LoginActivity extends AppCompatActivity {
                     User.getInstance().setSessionToken(response.body());
                     User.getInstance().setLoginSuccess(User.LoginSuccess.SUCCEED);
                     getAccountDetails(apiKey);
-
-                    Log.i("succeed", response.body().getSessionId());
                 } else {
-                    Log.i("hello", response.message());
-
-                    switch (response.code()) {
-                        // TODO: implement error codes handling
-                    }
+                    Toast.makeText(getApplicationContext(),"failed to connect!"+response.code(),Toast.LENGTH_SHORT);
                 }
             }
 

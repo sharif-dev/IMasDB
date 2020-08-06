@@ -61,7 +61,5 @@ public class SearchResultAdapter extends ArrayAdapter<Movie> {
         });
         Picasso.get().load(imageBaseUrl+movie.getPosterPath()).placeholder(R.drawable.loading_placeholder).error(R.drawable.ic_baseline_image_24).into(viewHolder.ivCover);
         return convertView;
-        //TODO:add no image default cover
-        //TODO:add onCLickListeners
     }
 }

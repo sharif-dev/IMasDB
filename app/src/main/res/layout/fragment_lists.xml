@@ -7,81 +7,79 @@
     android:fillViewport="true"
     android:background="@color/backgroundDark"
     tools:context=".view.TrendListsFragment">
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@color/backgroundDark"
+        android:isScrollContainer="true"
+        android:scrollY="@dimen/activity_horizontal_margin"
+        android:scrollbarTrackVertical="@dimen/activity_horizontal_margin"
+        tools:context=".MainActivity">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recently_played_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="124dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            android:background="@color/backgroundDark"
-            android:isScrollContainer="true"
-            android:scrollY="@dimen/activity_horizontal_margin"
-            android:scrollbarTrackVertical="@dimen/activity_horizontal_margin"
-            tools:context=".MainActivity">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/most_popular_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recently_played_recycler" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recently_played_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="188dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/top_rated_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/most_popular_recycler" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/most_popular_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="150dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recently_played_recycler" />
+        <TextView
+            android:id="@+id/textView"
+            style="@style/movie_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="44dp"
+            android:text="@string/recently_played_movies"
+            app:layout_constraintBottom_toTopOf="@+id/recently_played_recycler"
+            app:layout_constraintStart_toStartOf="parent" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/top_rated_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="150dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/most_popular_recycler" />
+        <TextView
+            android:id="@+id/textView2"
+            style="@style/movie_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/most_popular_movies"
+            app:layout_constraintBottom_toTopOf="@+id/most_popular_recycler"
+            android:layout_marginStart="44dp"
 
-            <TextView
-                android:id="@+id/textView"
-                style="@style/movie_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:text="@string/recently_played_movies"
-                app:layout_constraintBottom_toTopOf="@+id/recently_played_recycler"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
-                android:id="@+id/textView2"
-                style="@style/movie_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:text="@string/most_popular_movies"
-                app:layout_constraintBottom_toTopOf="@+id/most_popular_recycler"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/textView3"
-                style="@style/movie_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginBottom="24dp"
-                android:text="@string/top_rated_movies"
-                app:layout_constraintBottom_toTopOf="@+id/top_rated_recycler"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textView3"
+            style="@style/movie_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/top_rated_movies"
+            app:layout_constraintBottom_toTopOf="@+id/top_rated_recycler"
+            android:layout_marginStart="44dp"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
