@@ -22,11 +22,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.imasdb.model.CustomListType;
 import com.example.imasdb.model.Movie;
 import com.example.imasdb.model.User;
 import com.example.imasdb.model.list_models.ListResult;
+import com.example.imasdb.network.AuthApiEndpointInterface;
 import com.example.imasdb.view.CreateListFragment;
 import com.example.imasdb.view.CustomeListFragment;
 import com.example.imasdb.view.OnListItemClickedListener;
@@ -39,6 +41,12 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.example.imasdb.network.RetrofitBuilder.getAuthApi;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -59,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private OnMovieClickListener onMovieClickListener;
     private OnListItemClickedListener onListItemClickedListener;
+    private MenuItem navLogin;
+    private MenuItem navLogout;
+    private MenuItem navList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,19 +90,29 @@ public class MainActivity extends AppCompatActivity {
                 transitFrag(fragment, true);
             }
         };
-
-        if (!User.getUser().getLoggedIn()) {
-            launchComposeView(LoginLaunchType.LOGIN);
-        }
         setupDrawerMenu();
+        if (!User.getUser().getLoggedIn()) {
+            setSessionGuest();
+        } else {
+            navLogin.setVisible(false);
+        }
         context = this;
         handleIntent(getIntent());
     }
 
+    private void setSessionGuest() {
+        navLogout.setVisible(false);
+        navLogin.setVisible(true);
+        navList.setVisible(false);
+    }
+
+
     @Override
     protected void onResume() {
         if (!User.getUser().getLoggedIn()) {
-            launchComposeView(LoginLaunchType.LOGIN);
+            setSessionGuest();
+        } else {
+            navLogin.setVisible(false);
         }
         super.onResume();
     }
@@ -106,6 +127,10 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle.syncState();
         mDrawer.addDrawerListener(drawerToggle);
         navigationView = (NavigationView) findViewById(R.id.nvView);
+        Menu menu = navigationView.getMenu();
+        navLogin = menu.findItem(R.id.nav_login);
+        navLogout = menu.findItem(R.id.nav_logout);
+        navList = menu.findItem(R.id.nav_lists);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -127,8 +152,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void logout() {
-        launchComposeView(LoginLaunchType.LOGOUT);
+    public void logout() {
+        AuthApiEndpointInterface myAuthApi = getAuthApi();
+        Log.i("Session token", User.getInstance().getSessionToken().getSessionId());
+
+        Call<Object> logout = myAuthApi.logout(res.getString(R.string.api_key), User.getInstance().getSessionToken().getSessionId());
+        logout.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+
+                if (response.code() == 200) {
+                    User.getUser().setLoggedIn(false);
+                    Toast.makeText(getApplicationContext(), "you logged out successfully", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), Integer.toString(response.code()), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     public void launchComposeView(LoginLaunchType loginLaunchType) {
@@ -184,6 +230,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_create_list:
                 fragment = CreateListFragment.newInstance(onListItemClickedListener);
                 break;
+            case R.id.nav_logout:
+                logout();
+                setSessionGuest();
             default:
                 fragment = TrendListsFragment.newInstance(onMovieClickListener);
         }
@@ -202,5 +251,21 @@ public class MainActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onRestart() {
+        if (!User.getUser().getLoggedIn()) {
+            setSessionGuest();
+        } else {
+            navLogin.setVisible(false);
+        }
+        super.onRestart();
+    }
+
+    public void restart(){
+        Intent intent = new Intent(MainActivity.this,MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
     }
 }

@@ -33,5 +33,6 @@
     <string name="watch_list">Watch List</string>
     <string name="create_list">create list</string>
     <string name="delete">delete</string>
+    <string name="logout">logout</string>
 
 </resources>

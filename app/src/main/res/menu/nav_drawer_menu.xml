@@ -8,8 +8,11 @@
         <item
             android:id="@+id/nav_login"
             android:title="@string/login" />
+        <item
+            android:id="@+id/nav_logout"
+            android:title="@string/logout"/>
     </group>
-    <item android:title="Lists">
+    <item android:title="Lists" android:id="@+id/nav_lists">
         <menu>
             <group android:checkableBehavior="single">
                 <item
