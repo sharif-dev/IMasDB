@@ -82,13 +82,13 @@ public class CreateListFragment extends Fragment {
         Button button = view.findViewById(R.id.createListButton);
         getLists();
         final EditText editText = view.findViewById(R.id.listName);
+        final EditText desc = view.findViewById(R.id.description);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createNewList(editText.getText().toString());
+                createNewList(editText.getText().toString(), desc.getText().toString());
             }
         });
-        CreateListAdapter createListAdapter = new CreateListAdapter(new ArrayList<ListResult>());
         createListAdapter.setOnListItemClickedListener(onListItemClickedListener);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -97,9 +97,9 @@ public class CreateListFragment extends Fragment {
         return view;
     }
 
-    private void createNewList(String name) {
+    private void createNewList(String name, String desc) {
         Log.e("ses", User.getInstance().getSessionToken().getSessionId());
-        Call<Object> create = RetrofitBuilder.getCreateListApi().createList(getResources().getString(R.string.api_key), User.getUser().getSessionToken().getSessionId(), new CreateListBody(name, "", "en"));
+        Call<Object> create = RetrofitBuilder.getCreateListApi().createList(getResources().getString(R.string.api_key), User.getUser().getSessionToken().getSessionId(), new CreateListBody(name, desc, "en"));
         create.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {

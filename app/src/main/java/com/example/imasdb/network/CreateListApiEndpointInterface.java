@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -23,4 +24,6 @@ public interface CreateListApiEndpointInterface {
     @Headers("Content-Type: application/json;charset=utf-8")
     Call<Object> createList(@Query("api_key") String apiKey, @Query("session_id") String sessionId, @Body CreateListBody name);
 
+    @DELETE("list/{list_id}")
+    Call<Object> deleteList(@Path("list_id") String listId, @Query("api_key") String apiKey, @Query("session_id") String sessionId);
 }

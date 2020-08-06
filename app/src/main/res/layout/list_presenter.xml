@@ -1,32 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/movie_item_state"
+    android:background="@drawable/list_item_selector"
     android:orientation="vertical">
 
 
     <TextView
         android:id="@+id/listNameSet"
         style="@style/titles"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="20dp"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:text="TextView"
+        android:textColor="@color/backgroundDark"
         android:textSize="25sp"
-        tools:layout_editor_absoluteX="174dp"
-        tools:layout_editor_absoluteY="38dp" />
+        app:layout_constraintEnd_toStartOf="@+id/delete_list"
+        app:layout_constraintHorizontal_bias="0.186"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/listDesc"
         style="@style/desc"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="20dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
         android:layout_marginTop="20dp"
         android:text=""
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listNameSet" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/delete_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="28dp"
+        android:background="@drawable/movie_detail_image"
+        android:text="@string/delete"
+        android:textColor="@color/redTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
