@@ -110,7 +110,7 @@ public class MovieFragment extends Fragment {
         });
     }
     private void showAddToListDialog() {
-        AddToListDialogFragment addToListDialogFragment = AddToListDialogFragment.newInstance("Some Title");
+        AddToListDialogFragment addToListDialogFragment = AddToListDialogFragment.newInstance("Some Title",movie.getId());
         addToListDialogFragment.show(getChildFragmentManager(), "fragment_edit_name");
     }
 

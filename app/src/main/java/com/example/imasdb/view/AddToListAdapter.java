@@ -22,12 +22,10 @@ import java.util.List;
 public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.ViewHolder> {
     private List<ListResult> lists;
     private OnListItemClickedListener onListItemClickedListener;
-
+    private int movieId;
 
     public AddToListAdapter(List<ListResult> lists) {
-
         this.lists = lists;
-
     }
 
     public void setOnListItemClickedListener(OnListItemClickedListener onListItemClickedListener) {
@@ -39,7 +37,7 @@ public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.View
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View contactView = inflater.inflate(R.layout.list_presenter, parent, false);
+        View contactView = inflater.inflate(R.layout.list_presenter_add_to_list, parent, false);
         return new AddToListAdapter.ViewHolder(contactView);
     }
 
@@ -89,6 +87,5 @@ public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.View
         Log.e("size", results.getListResults().size() + "");
         this.notifyDataSetChanged();
     }
-
 
 }

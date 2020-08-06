@@ -1,5 +1,6 @@
 package com.example.imasdb.network;
 
+import com.example.imasdb.model.RequestBodies.AddToListBody;
 import com.example.imasdb.model.RequestBodies.CreateListBody;
 import com.example.imasdb.model.list_models.List;
 
@@ -26,4 +27,8 @@ public interface CreateListApiEndpointInterface {
 
     @DELETE("list/{list_id}")
     Call<Object> deleteList(@Path("list_id") String listId, @Query("api_key") String apiKey, @Query("session_id") String sessionId);
+
+    @POST("list/{list_id}/add_item")
+    @Headers("Content-Type: application/json;charset=utf-8")
+    Call<Object> addMovieToList(@Path("list_id") String listId, @Query("api_key") String apiKey, @Query("session_id") String sessionId, @Body AddToListBody body);
 }

@@ -76,11 +76,9 @@ public class CreateListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_list, container, false);
         recyclerView = view.findViewById(R.id.createListRecycler);
         Button button = view.findViewById(R.id.createListButton);
-        getLists();
         final EditText editText = view.findViewById(R.id.listName);
         final EditText desc = view.findViewById(R.id.description);
         button.setOnClickListener(new View.OnClickListener() {
@@ -89,11 +87,13 @@ public class CreateListFragment extends Fragment {
                 createNewList(editText.getText().toString(), desc.getText().toString());
             }
         });
+        CreateListAdapter createListAdapter = new CreateListAdapter(new ArrayList<ListResult>());
         createListAdapter.setOnListItemClickedListener(onListItemClickedListener);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(createListAdapter);
+        getLists();
         return view;
     }
 
