@@ -29,9 +29,19 @@ import retrofit2.Response;
 import static com.example.imasdb.model.User.getApiKey;
 
 public class CreateListAdapter extends RecyclerView.Adapter<CreateListAdapter.ViewHolder> {
+
+
+    public interface OnListItemDeleted {
+        void onListDeleted(String listId);
+    }
+
     private List<ListResult> lists;
     private OnListItemClickedListener onListItemClickedListener;
+    private OnListItemDeleted onListItemDeleted;
 
+    public void setOnListItemDeleted(OnListItemDeleted onListItemDeleted) {
+        this.onListItemDeleted = onListItemDeleted;
+    }
 
     public CreateListAdapter(List<ListResult> lists) {
         this.lists = lists;
@@ -75,21 +85,7 @@ public class CreateListAdapter extends RecyclerView.Adapter<CreateListAdapter.Vi
                 @Override
                 public void onClick(View view) {
                     final int position = getAdapterPosition();
-                    Call<Object> del = RetrofitBuilder.getCreateListApi().deleteList(lists.get(position).getId().toString(), getApiKey(), User.getUser().getSessionToken().getSessionId());
-                    del.enqueue(new Callback<Object>() {
-                        @Override
-                        public void onResponse(Call<Object> call, Response<Object> response) {
-                            if (response.code() == 200) {
-                                lists.remove(position);
-                                notifyItemRemoved(position);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Object> call, Throwable t) {
-
-                        }
-                    });
+                    onListItemDeleted.onListDeleted(lists.get(position).getId().toString());
                 }
             });
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -114,11 +110,13 @@ public class CreateListAdapter extends RecyclerView.Adapter<CreateListAdapter.Vi
     }
 
     public void addAll(com.example.imasdb.model.list_models.List results) {
-        lists.clear();
         lists.addAll(results.getListResults());
         Log.e("size", results.getListResults().size() + "");
         this.notifyDataSetChanged();
     }
-
+    public void clear(){
+        lists.clear();
+        this.notifyDataSetChanged();
+    }
 
 }

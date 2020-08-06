@@ -31,6 +31,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.imasdb.model.User.getApiKey;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link CreateListFragment#newInstance} factory method to
@@ -89,6 +91,25 @@ public class CreateListFragment extends Fragment {
         });
         CreateListAdapter createListAdapter = new CreateListAdapter(new ArrayList<ListResult>());
         createListAdapter.setOnListItemClickedListener(onListItemClickedListener);
+        createListAdapter.setOnListItemDeleted(new CreateListAdapter.OnListItemDeleted() {
+            @Override
+            public void onListDeleted(String listId) {
+                Call<Object> del = RetrofitBuilder.getCreateListApi().deleteList(listId, getApiKey(), User.getUser().getSessionToken().getSessionId());
+                del.enqueue(new Callback<Object>() {
+                    @Override
+                    public void onResponse(Call<Object> call, Response<Object> response) {
+                        Log.i("DELLEEET", "onResponse: "+response.code());
+                        if(response.code() == 500 || response.code() == 200 || response.code() == 201){
+                            getLists();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<Object> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -105,16 +126,16 @@ public class CreateListFragment extends Fragment {
             public void onResponse(Call<Object> call, Response<Object> response) {
                 Log.e("create", response.code() + " " + response.message() + " " + response.errorBody());
                 if (response.isSuccessful()) {
+                    Toast.makeText(getContext(),"list created",Toast.LENGTH_SHORT).show();
                     getLists();
                 } else {
-                    Toast.makeText(getContext(), "try again! internet not connected", Toast.LENGTH_LONG);
+                    Toast.makeText(getContext(), "try again! internet not connected", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-                Log.e("create", t.getMessage() + "");
-
+                Toast.makeText(getContext(), "try again! internet not connected", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -129,6 +150,7 @@ public class CreateListFragment extends Fragment {
 
                 if (response.isSuccessful()) {
                     Log.e("list comp", response.code() + "");
+                    ((CreateListAdapter) recyclerView.getAdapter()).clear();
                     ((CreateListAdapter) recyclerView.getAdapter()).addAll(response.body());
                 } else {
                     Log.e("list error", response.code() + "");
