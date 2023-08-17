@@ -1,2 +1,2 @@
 # IMasDB
-A movie app based on TMDB database
+A movie app using TMDB Rest Api's
